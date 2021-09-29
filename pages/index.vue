@@ -1,7 +1,18 @@
 <template>
-  <Tutorial/>
+  <div>
+    <Tutorial/>
+    <Login/>
+  </div>
 </template>
 
 <script>
-export default {}
+import Tutorial from '@/components/Tutorial.vue'
+import Login from '@/pages/auth/login.vue'
+export default {
+  name: 'Main',
+  components: {
+    Tutorial,
+    Login
+  },
+}
 </script>
