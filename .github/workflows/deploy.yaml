@@ -21,4 +21,4 @@ jobs:
             git pull
             npm install
             npm run build
-            pm2 reload "Bolt Frontend"
+            pm2 reload "BOLT Frontend"
