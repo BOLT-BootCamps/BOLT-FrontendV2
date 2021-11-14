@@ -1,18 +1,16 @@
 <template>
-  <div class="dark">
-    <Tutorial/>
-    <Login/>
+  <div>
+    <Tutorial />
   </div>
 </template>
 
 <script>
 import Tutorial from '@/components/Tutorial.vue'
-import Login from '@/pages/auth/login.vue'
 export default {
   name: 'Main',
   components: {
-    Tutorial,
-    Login
+    Tutorial
   },
+  middleware: 'auth'
 }
 </script>
