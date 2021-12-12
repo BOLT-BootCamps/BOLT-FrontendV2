@@ -1,21 +1,21 @@
 <template>
   <div>
     <p>Signing in...</p>
-    <p v-if="message !== ''">{{message}}</p>
-
+    <p v-if="message !== ''">
+      {{ message }}
+    </p>
   </div>
-
 </template>
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       message: ''
     }
   },
-  mounted() {
-    if (this.$route.hash !== "") {
+  mounted () {
+    if (this.$route.hash !== '') {
       this.message = this.$route.hash
     }
   }

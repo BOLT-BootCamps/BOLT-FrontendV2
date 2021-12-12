@@ -25,6 +25,7 @@ export default {
       this.$auth.loginWith('auth0', {
         params: {
           mode: 'signup',
+          screen_hint: 'signup',
           prompt: 'login'
         }
       })
@@ -36,8 +37,7 @@ export default {
 
 <style scoped>
 .btn {
-  @apply bg-white shadow-lg rounded-2xl py-6 px-40 m-4;
-  @apply text-3xl font-semibold;
+  @apply bg-white shadow-lg rounded-2xl py-6 px-32 m-4 hover:bg-gray-100;
+  @apply text-2xl font-semibold;
 }
-
 </style>

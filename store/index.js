@@ -14,5 +14,5 @@ export const mutations = {
   },
   SET_PASSWORD (state, userData) {
     state.password = userData
-  },
+  }
 }

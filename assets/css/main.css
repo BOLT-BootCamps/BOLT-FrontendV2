@@ -1,0 +1,12 @@
+
+.title {
+  @apply font-bold text-5xl;
+}
+
+.dropdown {
+  @apply p-2 border rounded-md border-gray-200 bg-white;
+}
+
+.sort {
+  @apply font-medium;
+}

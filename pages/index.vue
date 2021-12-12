@@ -1,16 +1,31 @@
 <template>
   <div>
-    <Tutorial />
+    <div v-if="verified">
+      <div>
+        verified
+      </div>
+    </div>
+    <div v-else>
+      Not verified
+    </div>
   </div>
 </template>
 
 <script>
-import Tutorial from '@/components/Tutorial.vue'
 export default {
   name: 'Main',
   components: {
-    Tutorial
   },
-  middleware: 'auth'
+  layout: 'admin',
+  middleware: 'auth',
+  data () {
+    return {
+      verified: false
+    }
+  }
 }
 </script>
+
+<style>
+
+</style>
