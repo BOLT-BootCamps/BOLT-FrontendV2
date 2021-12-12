@@ -2,32 +2,32 @@
   <div class="p-8">
     <section class="flex flex-col space-y-4">
       <h1 class="title pb-4">
-        Add Event
+        Add Bootcamp
       </h1>
       <section class="grid grid-cols-2 gap-4 bg-gray-50 relative w-full p-4">
         <section>
           <h1 class="sort">
-            Event Title
+            Bootcamp Title
           </h1>
-          <input v-model="event.title" type="text" class="input-text">
+          <input v-model="bootcamp.title" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
             Zoom Link
           </h1>
-          <input v-model="event.link" type="text" class="input-text">
+          <input v-model="bootcamp.link" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
-            Event Description
+            Bootcamp Description
           </h1>
-          <textarea v-model="event.description" rows="4" cols="50" class="input-text" />
+          <textarea v-model="bootcamp.description" rows="4" cols="50" class="input-text" />
         </section>
         <section>
           <h1 class="sort">
             Bootcamp
           </h1>
-          <input v-model="event.bootcamp" type="text" class="input-text">
+          <input v-model="bootcamp.bootcamp" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
@@ -39,13 +39,13 @@
           <h1 class="sort">
             Image Link
           </h1>
-          <input v-model="event.image" type="text" class="input-text">
+          <input v-model="bootcamp.image" type="text" class="input-text">
         </section>
         <section class="absolute bottom-4 right-4 text-white">
-          <button class="bg-green-500 px-2 py-2 rounded-md inline-block" @click="submitEvent()">
+          <button class="bg-green-500 px-2 py-2 rounded-md inline-block" @click="submitBootcamp()">
             Submit
           </button>
-          <NuxtLink class="bg-red-500 px-2 py-2 rounded-md inline-block" to="/admin/events">
+          <NuxtLink class="bg-red-500 px-2 py-2 rounded-md inline-block" to="/admin/bootcamps">
             Discard
           </NuxtLink>
         </section>
@@ -53,12 +53,12 @@
       <h1 class="sort">
         Preview:
       </h1>
-      <event-card
-        :title="event.title"
-        :description="event.description"
-        :image="event.image"
-        :datetime="event.datetime"
-        :bootcamp="event.bootcamp"
+      <bootcamp-card
+        :title="bootcamp.title"
+        :description="bootcamp.description"
+        :image="bootcamp.image"
+        :datetime="bootcamp.datetime"
+        :bootcamp="bootcamp.bootcamp"
       />
       <section />
     </section>
@@ -66,16 +66,16 @@
 </template>
 
 <script>
-import EventCard from '~/components/user/EventCard.vue'
+import BootcampCard from '~/components/user/BootcampCard.vue'
 import RangePicker from '~/components/RangePicker.vue'
 export default {
-  name: 'AdminAddEvents',
-  components: { EventCard, RangePicker },
+  name: 'AdminAddBootcamp',
+  components: { BootcampCard, RangePicker },
   layout: 'admin',
   middleware: 'auth',
   data () {
     return {
-      event:
+      bootcamp:
         {
           title: '',
           link: '',
@@ -88,21 +88,21 @@ export default {
   },
   head () {
     return {
-      title: 'AddEvent',
+      title: 'AddBootcamp',
       meta: [
         {
           hid: 'description',
           name: 'description',
-          content: 'BOLT Add Event'
+          content: 'BOLT Add Bootcamp'
         }
       ]
     }
   },
   mounted () {
-    this.$nuxt.$emit('current-link', 'Events')
+    this.$nuxt.$emit('current-link', 'Bootcamps')
   },
   methods: {
-    submitEvent () {
+    submitBootcamp () {
       console.log('submitted')
     }
   }
