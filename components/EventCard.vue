@@ -11,14 +11,14 @@
         {{ bootcamp }}
       </div>
     </section>
-    <section class="p-4 flex w-full relative">
+    <section class="p-4 flex w-full relative space-y-2">
       <section>
         <div class="event-title">
           {{ title }}
         </div>
-        <div>
-          {{ description }}
-        </div>
+        <p class="w-96">
+          {{ description.substring(0,200) }}...
+        </p>
         <div class="flex absolute bottom-4 space-x-2">
           <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
             Edit Event
@@ -28,7 +28,7 @@
           </button>
         </div>
       </section>
-      <section class="ml-auto">
+      <section class="ml-auto ">
         <img :src="image" alt="Event Image" class="w-96 object-cover h-full rounded-lg bg-blue-400">
       </section>
     </section>
@@ -70,7 +70,7 @@ export default {
       const date = new Date(datetime)
       let hours = date.getHours()
       let minutes = date.getMinutes()
-      const ampm = hours >= 12 ? 'pm' : 'am'
+      const ampm = hours >= 12 ? 'PM' : 'AM'
       hours = hours % 12
       hours = hours || 12 // the hour '0' should be '12'
       minutes = minutes < 10 ? '0' + minutes : minutes
@@ -83,7 +83,7 @@ export default {
 
 <style scoped>
 .event-card {
-  @apply h-56 bg-blue-100 rounded-lg flex flex-row drop-shadow-md;
+  @apply h-56 bg-blue-100 rounded-lg flex flex-row shadow-md;
   width: 1000px;
 }
 .event-glance {

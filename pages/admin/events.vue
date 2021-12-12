@@ -14,13 +14,13 @@
               Date
             </option>
             <option value="Not Date">
-              Not Date
+              Upcoming Events
             </option>
           </select>
         </div>
         <div class="flex flex-row items-center space-x-2">
           <p class="sort">
-            Event:
+            Bootcamp:
           </p>
           <select id="sort" name="sort" class="dropdown">
             <option value="Date">
@@ -31,6 +31,19 @@
             </option>
           </select>
         </div>
+        <section class="flex flex-row ml-auto text-white space-x-2">
+          <NuxtLink class="bg-blue-500 px-2 py-1 rounded-md" to="/admin/addEvent">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            New Event
+          </NuxtLink>
+          <button class="bg-green-500 px-2 py-2 rounded-md inline-block">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </button>
+        </section>
       </section>
       <event-card
         v-for="(event, ind) in events"
@@ -59,7 +72,7 @@ export default {
       events: [
         {
           title: 'Microsoft Worksop',
-          description: 'Lorem ipsum',
+          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
           datetime: Date.now(),
           bootcamp: 'McGill',
           image: 'https://media.istockphoto.com/photos/man-speaking-at-a-business-conference-picture-id499517325?b=1&k=20&m=499517325&s=170667a&w=0&h=jMCaZov25c5VR1CP-4axUdJPEKSpBWbzzWAubQS3-oo='
