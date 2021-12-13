@@ -32,9 +32,7 @@
         <img :src="image" alt="Event Image" class="w-96 object-cover h-full rounded-lg bg-blue-400">
       </section>
     </section>
-    <Modal v-show="showModal" @close-modal="showModal=false">
-      />
-    </modal>
+    <Modal v-show="showModal" @close-modal="showModal=false" />
   </div>
 </template>
 
