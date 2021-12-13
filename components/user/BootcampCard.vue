@@ -7,9 +7,6 @@
       <div class="date py-4">
         {{ formatAMPM(datetime) }}
       </div>
-      <div class="glance-text">
-        {{ bootcamp }}
-      </div>
     </section>
     <section class="p-4 flex w-full relative space-y-2">
       <section>
@@ -54,7 +51,7 @@ export default {
       type: Number,
       required: true
     },
-    bootcamp: {
+    link: {
       type: String,
       required: true
     },

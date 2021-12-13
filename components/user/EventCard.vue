@@ -54,6 +54,10 @@ export default {
       type: Number,
       required: true
     },
+    link: {
+      type: String,
+      required: true
+    },
     bootcamp: {
       type: String,
       required: true

@@ -8,7 +8,7 @@
         {{ formatAMPM(datetime) }}
       </div>
       <div class="glance-text">
-        {{ bootcamp }}
+        {{ applicants }} Applicants
       </div>
     </section>
     <section class="p-4 flex w-full relative space-y-2">
@@ -54,9 +54,13 @@ export default {
       type: Number,
       required: true
     },
-    bootcamp: {
+    link: {
       type: String,
       required: true
+    },
+    applicants: {
+      type: Number,
+      default: 0
     },
     colour: {
       type: String,

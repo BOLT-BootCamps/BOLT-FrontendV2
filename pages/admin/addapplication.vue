@@ -2,32 +2,26 @@
   <div class="p-8">
     <section class="flex flex-col space-y-4">
       <h1 class="title pb-4">
-        Add Event
+        Add Application
       </h1>
       <section class="grid grid-cols-2 gap-4 bg-gray-50 relative w-full p-4">
         <section>
           <h1 class="sort">
             Event Title
           </h1>
-          <input v-model="event.title" type="text" class="input-text">
-        </section>
-        <section>
-          <h1 class="sort">
-            Zoom Link
-          </h1>
-          <input v-model="event.link" type="text" class="input-text">
+          <input v-model="application.title" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
             Event Description
           </h1>
-          <textarea v-model="event.description" rows="4" cols="50" class="input-text" />
+          <textarea v-model="application.description" rows="4" cols="50" class="input-text" />
         </section>
         <section>
           <h1 class="sort">
-            Bootcamp
+            Form Link
           </h1>
-          <input v-model="event.bootcamp" type="text" class="input-text">
+          <input v-model="application.form" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
@@ -39,7 +33,7 @@
           <h1 class="sort">
             Image Link
           </h1>
-          <input v-model="event.image" type="text" class="input-text">
+          <input v-model="application.image" type="text" class="input-text">
         </section>
         <section class="absolute bottom-4 right-4 text-white">
           <button class="bg-green-500 px-2 py-2 rounded-md inline-block" @click="submitEvent()">
@@ -53,13 +47,12 @@
       <h1 class="sort">
         Preview:
       </h1>
-      <event-card
-        :title="event.title"
-        :description="event.description"
-        :image="event.image"
-        :link="event.link"
-        :datetime="event.datetime"
-        :bootcamp="event.bootcamp"
+      <application-card
+        :title="application.title"
+        :description="application.description"
+        :image="application.image"
+        :datetime="application.datetime"
+        :form="application.form"
       />
       <section />
     </section>
@@ -67,22 +60,22 @@
 </template>
 
 <script>
-import EventCard from '~/components/user/EventCard.vue'
+import ApplicationCard from '~/components/user/ApplicationCard.vue'
 import RangePicker from '~/components/RangePicker.vue'
 export default {
-  name: 'AdminAddEvents',
-  components: { EventCard, RangePicker },
+  name: 'AdminAddApplication',
+  components: { ApplicationCard, RangePicker },
   layout: 'admin',
   middleware: 'auth',
   data () {
     return {
-      event:
+      application:
         {
           title: '',
           link: '',
           description: '',
           datetime: Date.now(),
-          bootcamp: '',
+          form: '',
           image: ''
         }
     }

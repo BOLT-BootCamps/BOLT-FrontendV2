@@ -4,7 +4,7 @@
       <h1 class="title pb-4">
         Add Bootcamp
       </h1>
-      <section class="grid grid-cols-2 gap-4 bg-gray-50 relative w-full p-4">
+      <section class="grid grid-cols-2 gap-4 bg-gray-50 relative w-full p-4 shadow-md">
         <section>
           <h1 class="sort">
             Bootcamp Title
@@ -15,19 +15,13 @@
           <h1 class="sort">
             Zoom Link
           </h1>
-          <input v-model="bootcamp.link" type="text" class="input-text">
+          <input v-model="bootcamp.link" placeholder="Default Zoom Link" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
             Bootcamp Description
           </h1>
           <textarea v-model="bootcamp.description" rows="4" cols="50" class="input-text" />
-        </section>
-        <section>
-          <h1 class="sort">
-            Bootcamp
-          </h1>
-          <input v-model="bootcamp.bootcamp" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
@@ -58,7 +52,7 @@
         :description="bootcamp.description"
         :image="bootcamp.image"
         :datetime="bootcamp.datetime"
-        :bootcamp="bootcamp.bootcamp"
+        :link="bootcamp.link"
       />
       <section />
     </section>
@@ -81,7 +75,6 @@ export default {
           link: '',
           description: '',
           datetime: Date.now(),
-          bootcamp: '',
           image: ''
         }
     }
