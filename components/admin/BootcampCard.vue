@@ -21,10 +21,10 @@
         </p>
         <div class="flex absolute bottom-4 space-x-2">
           <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
-            Edit Event
+            Edit Bootcamp
           </button>
           <button class="border-2 border-red-500 rounded-md py-2 px-4 hover:bg-red-500 hover:text-white transition-colors font-medium">
-            Delete Event
+            Delete Bootcamp
           </button>
         </div>
       </section>

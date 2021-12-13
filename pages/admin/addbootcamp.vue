@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import BootcampCard from '~/components/user/BootcampCard.vue'
+import BootcampCard from '~/components/admin/BootcampCard.vue'
 import RangePicker from '~/components/RangePicker.vue'
 export default {
   name: 'AdminAddBootcamp',

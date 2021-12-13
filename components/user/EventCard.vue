@@ -20,7 +20,7 @@
           {{ description.substring(0,200) }}...
         </p>
         <div class="flex absolute bottom-4 space-x-2">
-          <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
+          <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium" @click="showModal = true">
             View Event
           </button>
           <button class="border-2 border-blue-500 rounded-md py-2 px-4 hover:bg-blue-500 hover:text-white transition-colors font-medium">
@@ -32,11 +32,16 @@
         <img :src="image" alt="Event Image" class="w-96 object-cover h-full rounded-lg bg-blue-400">
       </section>
     </section>
+    <Modal v-show="showModal" @close-modal="showModal=false">
+      />
+    </modal>
   </div>
 </template>
 
 <script>
+import Modal from '~/components/Modal.vue'
 export default {
+  components: { Modal },
   props: {
     title: {
       type: String,
@@ -65,6 +70,11 @@ export default {
     colour: {
       type: String,
       default: 'blue-50'
+    }
+  },
+  data () {
+    return {
+      showModal: false
     }
   },
   computed: {

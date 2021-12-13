@@ -1,4 +1,4 @@
-# dashboardv2
+# BOLT Dashboard
 
 ## Build Setup
 

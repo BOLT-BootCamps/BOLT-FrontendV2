@@ -7,13 +7,13 @@
       <section class="grid grid-cols-2 gap-4 bg-gray-50 relative w-full p-4">
         <section>
           <h1 class="sort">
-            Event Title
+            Application Title
           </h1>
           <input v-model="application.title" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
-            Event Description
+            Application Description
           </h1>
           <textarea v-model="application.description" rows="4" cols="50" class="input-text" />
         </section>
@@ -36,10 +36,10 @@
           <input v-model="application.image" type="text" class="input-text">
         </section>
         <section class="absolute bottom-4 right-4 text-white">
-          <button class="bg-green-500 px-2 py-2 rounded-md inline-block" @click="submitEvent()">
+          <button class="bg-green-500 px-2 py-2 rounded-md inline-block" @click="submitApplication()">
             Submit
           </button>
-          <NuxtLink class="bg-red-500 px-2 py-2 rounded-md inline-block" to="/admin/events">
+          <NuxtLink class="bg-red-500 px-2 py-2 rounded-md inline-block" to="/admin/applications">
             Discard
           </NuxtLink>
         </section>
@@ -82,21 +82,21 @@ export default {
   },
   head () {
     return {
-      title: 'AddEvent',
+      title: 'AddApplication',
       meta: [
         {
           hid: 'description',
           name: 'description',
-          content: 'BOLT Add Event'
+          content: 'BOLT Add Application'
         }
       ]
     }
   },
   mounted () {
-    this.$nuxt.$emit('current-link', 'Events')
+    this.$nuxt.$emit('current-link', 'Applications')
   },
   methods: {
-    submitEvent () {
+    submitApplication () {
       console.log('submitted')
     }
   }

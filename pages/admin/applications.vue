@@ -22,6 +22,7 @@
         :image="application.image"
         :datetime="application.datetime"
         :form="application.form"
+        :applicants="application.applicants"
       />
 
       <section />
