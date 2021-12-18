@@ -10,8 +10,7 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Bolt represents a unique combination of a hackathon and a case competition for students to delve into the world of business technology.' },
-      { name: 'format-detection', content: 'telephone=no' },
-      { hid: 'og:image', property: 'og:image', content: '/icon.jpg' },
+      { hid: 'og:image', property: 'og:image', content: '/icon.png' },
       { hid: 'twitter:card', name: 'twitter:card', content: 'summary_large_image' },
       { hid: 'keywords', name: 'keywords', content: 'BOLT, computer science, programming, business, product, bootcamp, student, case competition' }
     ],
