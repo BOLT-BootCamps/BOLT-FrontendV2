@@ -18,6 +18,13 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  pwa: {
+    icon: false,
+    meta: false,
+    manifest: {
+      lang: 'en'
+    }
+  },
   loading: { color: '#fff' },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
@@ -38,15 +45,14 @@ export default {
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/tailwindcss
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/pwa'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa',
     '@nuxtjs/auth-next'
   ],
 
@@ -65,12 +71,6 @@ export default {
         clientId: process.env.AUTH0_CLIENT_ID,
         autoLogout: true
       }
-    }
-  },
-  // PWA module configuration: https://go.nuxtjs.dev/pwa
-  pwa: {
-    manifest: {
-      lang: 'en'
     }
   },
   server: {
