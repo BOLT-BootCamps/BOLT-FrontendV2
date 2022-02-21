@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 const express = require('express')
 const consola = require('consola')
 const { loadNuxt } = require('nuxt-start')

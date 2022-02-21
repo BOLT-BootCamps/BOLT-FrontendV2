@@ -17,14 +17,14 @@ export const getEvents = () => {
   const query = `
     query {
       events {
-        id,
-        name,
-        description,
-        start_date,
-        end_date,
-        image_url,
-        zoom_url,
-        bootcamp
+        pkiEventID,
+        sEventName,
+        sDescription,
+        dtStartDate,
+        dtEndDate,
+        sImageUrl,
+        sZoomUrl,
+        fkiBootcampID
       }
     }
   `

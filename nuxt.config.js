@@ -60,7 +60,7 @@ module.exports = {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'https://apibolt.zhehaizhang.com'
+    baseURL: 'https://bolt-backend.azurewebsites.net'
   },
   graphql: {
     clients: {
