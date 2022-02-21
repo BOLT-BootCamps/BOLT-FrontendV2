@@ -48,11 +48,11 @@
       <event-card
         v-for="(event, ind) in events"
         :key="ind"
-        :title="event.title"
+        :title="event.name"
         :description="event.description"
         :image="event.image"
         :link="event.link"
-        :datetime="event.datetime"
+        :datetime="event.start_date"
         :bootcamp="event.bootcamp"
       />
 
@@ -63,11 +63,22 @@
 
 <script>
 import EventCard from '~/components/admin/EventCard.vue'
+import { getEvents } from '~/utils/graphql'
 export default {
   name: 'AdminEvents',
   components: { EventCard },
   layout: 'admin',
   middleware: 'auth',
+  async asyncData ({ params, $axios }) {
+    let events = []
+    try {
+      events = await $axios.$post('graphql', { query: getEvents() }).data
+    } catch (e) {
+      console.log(e.message)
+    }
+
+    return { events }
+  },
   data () {
     return {
       events: [

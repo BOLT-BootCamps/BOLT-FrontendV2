@@ -1,4 +1,5 @@
-export default {
+// eslint-disable-next-line nuxt/no-cjs-in-config
+module.exports = {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s | BOLT Dashboard',
@@ -46,7 +47,8 @@ export default {
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    'nuxt-graphql-request'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -57,7 +59,17 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL: 'https://apibolt.zhehaizhang.com'
+  },
+  graphql: {
+    clients: {
+      default: {
+        endpoint: 'https://apibolt.zhehaizhang.com/graphql',
+        options: {}
+      }
+    }
+  },
   auth: {
     redirect: {
       login: '/auth/login',
@@ -69,12 +81,13 @@ export default {
       auth0: {
         domain: process.env.AUTH0_DOMAIN,
         clientId: process.env.AUTH0_CLIENT_ID,
+        audience: process.env.AUTH0_AUDIENCE,
         autoLogout: true
       }
     }
   },
   server: {
-    port: 8000
+    port: 8080
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
