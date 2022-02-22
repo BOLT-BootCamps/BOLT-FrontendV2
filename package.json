@@ -23,7 +23,7 @@
     "graphql": "^16.3.0",
     "nuxt": "^2.15.7",
     "nuxt-graphql-request": "^4.3.0",
-    "v-calendar": "^2.3.4",
+    "v-calendar": "^2.4.1",
     "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
