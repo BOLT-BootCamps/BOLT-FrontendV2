@@ -48,12 +48,12 @@
       <event-card
         v-for="(event, ind) in events"
         :key="ind"
-        :title="event.name"
-        :description="event.description"
-        :image="event.image"
-        :link="event.link"
-        :datetime="event.start_date"
-        :bootcamp="event.bootcamp"
+        :title="event.sEventName"
+        :description="event.sDescription"
+        :image="event.sImageUrl"
+        :link="event.sZoomLink"
+        :datetime="event.dtStartDate"
+        :bootcamp="event.fkiBootcampID"
       />
 
       <section />
