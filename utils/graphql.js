@@ -30,3 +30,15 @@ export const getEvents = () => {
   `
   return query
 }
+
+export const getBootcampNames = () => {
+  const query = `
+    query {
+      bootcamps {
+        pkiBootcampID,
+        sBootcampName,
+      }
+    }
+  `
+  return query
+}
