@@ -51,7 +51,7 @@
         :title="event.sEventName"
         :description="event.sDescription"
         :image="event.sImageUrl"
-        :link="event.sZoomLink"
+        :link="event.sZoomUrl"
         :datetime="event.dtStartDate"
         :bootcamp="event.fkiBootcampID"
       />
@@ -72,7 +72,9 @@ export default {
   async asyncData ({ params, $axios }) {
     let events = []
     try {
-      events = await $axios.$post('graphql', { query: getEvents() }).data
+      const response = await $axios.$post('graphql', { query: getEvents() })
+      events = response.data.events
+      console.log(events)
     } catch (e) {
       console.log(e.message)
     }

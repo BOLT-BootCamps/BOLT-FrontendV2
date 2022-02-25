@@ -42,3 +42,21 @@ export const getBootcampNames = () => {
   `
   return query
 }
+
+export const addEvent = (event) => {
+  const mutation = `
+    mutation {
+      addEvent (
+        pkiEventID,
+        sEventName,
+        sDescription,
+        dtStartDate,
+        dtEndDate,
+        sImageUrl,
+        sZoomUrl,
+        fkiBootcampID
+      }
+    }
+  `
+  return mutation
+}

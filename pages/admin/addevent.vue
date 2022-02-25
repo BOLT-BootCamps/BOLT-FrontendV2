@@ -15,7 +15,7 @@
           <h1 class="sort">
             Zoom Link
           </h1>
-          <input v-model="event.sZoomLink" type="text" class="input-text">
+          <input v-model="event.sZoomUrl" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
@@ -64,9 +64,9 @@
         :title="event.sEventName"
         :description="event.sDescription"
         :image="event.sImageUrl"
-        :link="event.sZoomLink"
-        :datetime="event.dtStartDate"
         :bootcamp="event.sBootcampName"
+        :link="event.sZoomUrl"
+        :datetime="event.dtStartDate"
       />
       <section />
     </section>
@@ -96,15 +96,15 @@ export default {
     return {
       event:
         {
-          title: '',
-          link: '',
-          description: '',
-          datetime: Date.now(),
-          bootcamp: '',
-          image: ''
+          sEventName: '',
+          sDescription: '',
+          dtStartDate: Date.now(),
+          dtEndDate: Date.now(),
+          sImageUrl: Date.now(),
+          sZoomUrl: Date.now(),
+          fkiBootcampID: Date.now()
         },
-      bootcamps:
-      []
+      bootcamps: []
     }
   },
   head () {
@@ -123,13 +123,12 @@ export default {
     this.$nuxt.$emit('current-link', 'Events')
   },
   methods: {
-    submitEvent ($axios) {
+    async submitEvent () {
       try {
-        $axios.$post('graphql', { mutation: addEvent(this.event) })
+        await this.$axios.$post('graphql', { mutation: addEvent(this.event) })
       } catch (e) {
         console.log(e.message)
       }
-      console.log('submitted')
     }
   }
 }
