@@ -24,7 +24,8 @@ export const getEvents = () => {
         dtEndDate,
         sImageUrl,
         sZoomUrl,
-        fkiBootcampID
+        fkiBootcampID,
+        sBootcampName
       }
     }
   `
@@ -46,16 +47,17 @@ export const getBootcampNames = () => {
 export const addEvent = (event) => {
   const mutation = `
     mutation {
-      addEvent (
-        pkiEventID,
-        sEventName,
-        sDescription,
-        dtStartDate,
-        dtEndDate,
-        sImageUrl,
-        sZoomUrl,
-        fkiBootcampID
-      }
+      addEvent (event: {
+
+          sEventName: '${event.sEventName}',
+          sDescription: '${event.sDescription}',
+          dtStartDate: '${event.dtStartDate}',
+          dtEndDate: '${event.dtEndDate}',
+          sImageUrl: '${event.sImageUrl}',
+          sZoomUrl: '${event.sZoomUrl},
+          fkiBootcampID: ${event.fkiBootcampID}
+        }
+      )
     }
   `
   return mutation

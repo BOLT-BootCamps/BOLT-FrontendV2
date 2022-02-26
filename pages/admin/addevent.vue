@@ -100,9 +100,10 @@ export default {
           sDescription: '',
           dtStartDate: Date.now(),
           dtEndDate: Date.now(),
-          sImageUrl: Date.now(),
-          sZoomUrl: Date.now(),
-          fkiBootcampID: Date.now()
+          sImageUrl: '',
+          sZoomUrl: '',
+          fkiBootcampID: 0,
+          sBootcampName: ''
         },
       bootcamps: []
     }
