@@ -17,12 +17,12 @@
       <application-card
         v-for="(application, ind) in applications"
         :key="ind"
-        :title="application.title"
-        :description="application.description"
-        :image="application.image"
-        :datetime="application.datetime"
-        :form="application.form"
-        :applicants="application.applicants"
+        :title="application.sApplicationName"
+        :description="application.sDescription"
+        :image="application.sImageUrl"
+        :datetime="application.dtStartDate"
+        :form="application.sFormUrl"
+        :applicants="application.iNumApplicants"
       />
 
       <section />
@@ -32,29 +32,41 @@
 
 <script>
 import ApplicationCard from '~/components/admin/ApplicationCard.vue'
+import { getApplications } from '~/utils/graphql'
 export default {
   name: 'AdminApplications',
   components: { ApplicationCard },
   layout: 'admin',
   middleware: 'auth',
+  async asyncData ({ params, $axios }) {
+    let applications = []
+    try {
+      const response = await $axios.$post('graphql', { query: getApplications() })
+      applications = response.data.applications
+    } catch (e) {
+      console.log(e.message)
+    }
+    console.log(applications)
+    return { applications }
+  },
   data () {
     return {
       applications: [
         {
-          title: 'McGill Application',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          datetime: Date.now(),
-          applicants: 31,
-          form: 'form link',
-          image: 'https://media.istockphoto.com/photos/man-speaking-at-a-business-conference-picture-id499517325?b=1&k=20&m=499517325&s=170667a&w=0&h=jMCaZov25c5VR1CP-4axUdJPEKSpBWbzzWAubQS3-oo='
+          sApplicationName: 'McGill Application',
+          sDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+          dtStartDate: Date.now(),
+          iNumApplicants: 31,
+          sFormUrl: 'form link',
+          sImageUrl: 'https://media.istockphoto.com/photos/man-speaking-at-a-business-conference-picture-id499517325?b=1&k=20&m=499517325&s=170667a&w=0&h=jMCaZov25c5VR1CP-4axUdJPEKSpBWbzzWAubQS3-oo='
         },
         {
-          title: 'UBC Application',
-          description: 'Lorem ipsum',
-          datetime: Date.now(),
-          applicants: 30,
-          form: 'form link',
-          image: 'image'
+          sApplicationName: 'UBC Application',
+          sDescription: 'Lorem ipsum',
+          dtStartDate: Date.now(),
+          iNumApplicants: 30,
+          sFormUrl: 'form link',
+          sImageUrl: 'image'
         }
       ]
     }

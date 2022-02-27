@@ -70,3 +70,20 @@ export const addEvent = () => {
   `
   return mutation
 }
+
+export const getApplications = () => {
+  const query = `
+    query {
+      applications {
+        pkiApplicationID,
+        sApplicationName,
+        sDescription,
+        dtStartDate,
+        sImageUrl,
+        sFormUrl,
+        iNumApplicants
+      }
+    }
+  `
+  return query
+}
