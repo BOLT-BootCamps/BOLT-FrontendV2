@@ -17,7 +17,7 @@
           {{ title }}
         </div>
         <p class="w-96">
-          {{ description.substring(0,200) }}...
+          {{ description ? description.substring(0,200) : '' }}...
         </p>
         <div class="flex absolute bottom-4 space-x-2">
           <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { formatAMPM } from '~/utils/date'
 export default {
   props: {
     title: {
@@ -44,11 +45,11 @@ export default {
     },
     description: {
       type: String,
-      required: true
+      default: ''
     },
     image: {
       type: String,
-      required: true
+      default: ''
     },
     startdate: {
       type: String,
@@ -60,7 +61,7 @@ export default {
     },
     link: {
       type: String,
-      required: true
+      default: ''
     },
     bootcamp: {
       type: String,
@@ -79,19 +80,7 @@ export default {
   },
   computed: {
   },
-  methods: {
-    formatAMPM (datetime) {
-      const date = new Date(datetime)
-      let hours = date.getHours()
-      let minutes = date.getMinutes()
-      const ampm = hours >= 12 ? 'PM' : 'AM'
-      hours = hours % 12
-      hours = hours || 12 // the hour '0' should be '12'
-      minutes = minutes < 10 ? '0' + minutes : minutes
-      const strTime = hours + ':' + minutes + ' ' + ampm
-      return strTime
-    }
-  }
+  methods: { formatAMPM }
 }
 </script>
 
