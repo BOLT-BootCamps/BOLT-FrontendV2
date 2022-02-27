@@ -44,18 +44,26 @@ export const getBootcampNames = () => {
   return query
 }
 
-export const addEvent = (event) => {
+export const addEvent = () => {
   const mutation = `
-    mutation {
+    mutation ADDEVENT(
+      $sEventName: String!, 
+      $sDescription: String!, 
+      $dtStartDate: String!, 
+      $dtEndDate: String!, 
+      $sImageUrl: String!,
+      $sZoomUrl: String!,
+      $fkiBootcampID: Int!,
+      ) {
       addEvent (event: {
 
-          sEventName: '${event.sEventName}',
-          sDescription: '${event.sDescription}',
-          dtStartDate: '${event.dtStartDate}',
-          dtEndDate: '${event.dtEndDate}',
-          sImageUrl: '${event.sImageUrl}',
-          sZoomUrl: '${event.sZoomUrl},
-          fkiBootcampID: ${event.fkiBootcampID}
+          sEventName: $sEventName,
+          sDescription: $sDescription,
+          dtStartDate: $dtStartDate,
+          dtEndDate: $dtEndDate,
+          sImageUrl: $sImageUrl,
+          sZoomUrl: $sZoomUrl,
+          fkiBootcampID: $fkiBootcampID
         }
       )
     }

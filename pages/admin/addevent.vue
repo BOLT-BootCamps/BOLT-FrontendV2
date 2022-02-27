@@ -28,10 +28,10 @@
             Bootcamp
           </h1>
           <select v-model="event.bootcamp">
-            <option disabled value="">
+            <option disabled value="" class="input-text">
               Please Select
             </option>
-            <option v-for="(id, bootcamp) in bootcamps" :key="id" :value="bootcamp.pkiBootcampID">
+            <option v-for="(bootcamp,id) in bootcamps" :key="id" :value="bootcamp.pkiBootcampID" class="input-text">
               {{ bootcamp.sBootcampName }}
             </option>
           </select>
@@ -86,7 +86,8 @@ export default {
   async asyncData ({ params, $axios }) {
     let bootcamps = []
     try {
-      bootcamps = await $axios.$post('graphql', { query: getBootcampNames() }).data
+      const response = await $axios.$post('graphql', { query: getBootcampNames() })
+      bootcamps = response.data.bootcamps
     } catch (e) {
       console.log(e.message)
     }
@@ -126,7 +127,9 @@ export default {
   methods: {
     async submitEvent () {
       try {
-        await this.$axios.$post('graphql', { mutation: addEvent(this.event) })
+        await this.$axios.$post('graphql',
+          { mutation: addEvent(), variables: this.event },
+          { headers: { 'Content-Type': 'application/graphql' } })
       } catch (e) {
         console.log(e.message)
       }
