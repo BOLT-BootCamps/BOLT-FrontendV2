@@ -48,13 +48,14 @@
       <event-card
         v-for="(event, ind) in events"
         :key="ind"
+        :eventid="event.pkiEventID"
         :title="event.sEventName"
         :description="event.sDescription"
         :image="event.sImageUrl"
         :link="event.sZoomUrl"
         :startdate="event.dtStartDate"
         :enddate="event.dtEndDate"
-        :bootcamp="event.bootcampName"
+        :bootcamp="event.sBootcampName"
         :bootcampid="event.fkiBootcampID"
       />
 

@@ -128,8 +128,14 @@ export default {
     async submitEvent () {
       try {
         await this.$axios.$post('graphql',
-          { mutation: addEvent(), variables: this.event },
-          { headers: { 'Content-Type': 'application/graphql' } })
+          {
+            query: addEvent(),
+            variables: {
+              ...this.event,
+              dtStartDate: new Date(this.event.dtStartDate).toISOString(),
+              dtEndDate: new Date(this.event.dtEndDate).toISOString()
+            }
+          })
       } catch (e) {
         console.log(e.message)
       }

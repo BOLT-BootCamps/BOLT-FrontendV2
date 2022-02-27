@@ -3,9 +3,14 @@
     <div class="modal-overlay" @click="$emit('close-modal')">
       <div class="modal" @click.stop>
         <img class="check" src="" alt="">
-        <h6>Saved!</h6>
-        <p>Your Details have been saved Successfully</p>
-        <button>Go Home</button>
+        <h6>{{ title }}</h6>
+        <p>{{ dialog }}</p>
+        <button class="confirm-button" @click="$emit('confirm-modal')">
+          {{ confirmMessage }}
+        </button>
+        <button class="back-button" @click="$emit('close-modal')">
+          Back
+        </button>
       </div>
       <div class="close" @click="$emit('close-modal')">
         <img class="close-img" src="" alt="">
@@ -15,7 +20,22 @@
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    title: {
+      type: String,
+      default: 'Modal Title'
+    },
+    dialog: {
+      type: String,
+      default: 'Modal Dialog'
+    },
+    confirmMessage: {
+      type: String,
+      default: 'Yes'
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -28,6 +48,7 @@ export default {}
   display: flex;
   justify-content: center;
   background-color: #000000da;
+  z-index: 2;
 }
 
 .modal {
@@ -65,7 +86,7 @@ p {
   margin: 20px 0;
 }
 
-button {
+.confirm-button {
   background-color: #ac003e;
   width: 150px;
   height: 40px;
@@ -73,6 +94,15 @@ button {
   font-size: 14px;
   border-radius: 16px;
   margin-top: 50px;
+}
+
+.back-button {
+  width: 150px;
+  height: 40px;
+  font-size: 14px;
+  border-radius: 16px;
+  margin-top: 50px;
+  @apply border-2 border-black;
 }
 
 .modal-fade-enter,

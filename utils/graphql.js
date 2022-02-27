@@ -70,3 +70,13 @@ export const addEvent = () => {
   `
   return mutation
 }
+
+export const deleteEvent = () => {
+  const mutation = `
+  mutation DELETEEVENT(
+    $id: Int!
+  ) {
+    deleteEvent (id: $id)
+  }`
+  return mutation
+}
