@@ -32,7 +32,14 @@
         <img :src="image" alt="Event Image" class="w-96 object-cover h-full rounded-lg bg-blue-400">
       </section>
     </section>
-    <Modal v-show="showDeleteModal" @close-modal="showDeleteModal=false" @confirm-modal="deleteEvent" />
+    <Modal
+      v-show="showDeleteModal"
+      :title="'Delete event'"
+      :dialog="'Are you sure you want to delete '+title"
+      :confirm-message="'Yes'"
+      @close-modal="showDeleteModal=false"
+      @confirm-modal="deleteEvent"
+    />
   </div>
 </template>
 
@@ -113,6 +120,7 @@ export default {
           }
         )
         this.showDeleteModal = false
+        this.$emit('fetch-events')
       } catch (e) {
         console.log(e.message)
       }

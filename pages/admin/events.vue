@@ -57,6 +57,7 @@
         :enddate="event.dtEndDate"
         :bootcamp="event.sBootcampName"
         :bootcampid="event.fkiBootcampID"
+        @fetch-events="fetchData"
       />
 
       <section />
@@ -104,6 +105,16 @@ export default {
     this.$nuxt.$emit('current-link', 'Events')
   },
   methods: {
+    async fetchData () {
+      let events = []
+      try {
+        const response = await this.$axios.$post('graphql', { query: getEvents() })
+        events = response.data.events
+      } catch (e) {
+        console.log(e.message)
+      }
+      this.events = events
+    }
   }
 }
 </script>
