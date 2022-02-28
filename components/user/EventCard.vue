@@ -2,10 +2,10 @@
   <div class="event-card">
     <section class="event-glance">
       <div class="glance-text">
-        {{ new Date(datetime).toDateString() }}
+        {{ new Date(startdate).toDateString() }}
       </div>
       <div class="date py-4">
-        {{ formatAMPM(datetime) }}
+        {{ formatAMPM(startdate) }}
       </div>
       <div class="glance-text">
         {{ bootcamp }}
@@ -53,8 +53,12 @@ export default {
       type: String,
       required: true
     },
-    datetime: {
-      type: Number,
+    startdate: {
+      type: String,
+      required: true
+    },
+    enddate: {
+      type: String,
       required: true
     },
     link: {

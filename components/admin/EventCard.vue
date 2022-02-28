@@ -20,9 +20,11 @@
           {{ description.substring(0,200) }}...
         </p>
         <div class="flex absolute bottom-4 space-x-2">
-          <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
-            Edit Event
-          </button>
+          <NuxtLink :to="'/admin/editevent/'+eventid">
+            <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
+              Edit Event
+            </button>
+          </NuxtLink>
           <button class="border-2 border-red-500 rounded-md py-2 px-4 hover:bg-red-500 hover:text-white transition-colors font-medium" @click="showDeleteModal = true">
             Delete Event
           </button>
@@ -34,9 +36,9 @@
     </section>
     <Modal
       v-show="showDeleteModal"
-      :title="'Delete event'"
+      title="Delete event"
       :dialog="'Are you sure you want to delete '+title"
-      :confirm-message="'Yes'"
+      confirm-message="Yes"
       @close-modal="showDeleteModal=false"
       @confirm-modal="deleteEvent"
     />
