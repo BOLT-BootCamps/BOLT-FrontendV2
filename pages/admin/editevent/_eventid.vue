@@ -109,7 +109,8 @@ export default {
   data () {
     return {
       event: {},
-      bootcamps: []
+      bootcamps: [],
+      submitted: false
     }
   },
   head () {
@@ -129,6 +130,10 @@ export default {
   },
   methods: {
     async submitEvent () {
+      if (this.submitted) {
+        return
+      }
+      this.submitted = true
       try {
         await this.$axios.$post('graphql',
           {
