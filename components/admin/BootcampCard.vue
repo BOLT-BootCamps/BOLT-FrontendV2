@@ -2,10 +2,10 @@
   <div class="event-card">
     <section class="event-glance">
       <div class="glance-text">
-        {{ new Date(datetime).toDateString() }}
+        {{ new Date(startdate).toDateString() }}
       </div>
       <div class="date py-4">
-        {{ formatAMPM(datetime) }}
+        {{ formatAMPM(startdate) }}
       </div>
       <div class="glance-text">
         {{ applicants }} Applicants
@@ -20,10 +20,12 @@
           {{ description.substring(0,200) }}...
         </p>
         <div class="flex absolute bottom-4 space-x-2">
-          <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
-            Edit Bootcamp
-          </button>
-          <button class="border-2 border-red-500 rounded-md py-2 px-4 hover:bg-red-500 hover:text-white transition-colors font-medium">
+          <NuxtLink :to="'/admin/editbootcamp/'+bootcampid">
+            <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
+              Edit Bootcamp
+            </button>
+          </NuxtLink>
+          <button class="border-2 border-red-500 rounded-md py-2 px-4 hover:bg-red-500 hover:text-white transition-colors font-medium" @click="showDeleteModal = true">
             Delete Bootcamp
           </button>
         </div>
@@ -32,12 +34,28 @@
         <img :src="image" alt="Event Image" class="w-96 object-cover h-full rounded-lg bg-blue-400">
       </section>
     </section>
+    <Modal
+      v-show="showDeleteModal"
+      title="Delete bootcamp"
+      :dialog="'Are you sure want to delete ' + title"
+      confirm-message="Yes"
+      @close-modal="showDelete=false"
+      @confirm-modal="deleteBootcamp"
+    />
   </div>
 </template>
 
 <script>
+import Modal from '~/components/Modal.vue'
+import { deleteBootcamp } from '~utils/graphql'
+
 export default {
+  components: { Modal },
   props: {
+    bootcampid: {
+      type: Number,
+      required: true
+    },
     title: {
       type: String,
       required: true
@@ -50,8 +68,12 @@ export default {
       type: String,
       required: true
     },
-    datetime: {
-      type: Number,
+    startdate: {
+      type: String,
+      required: true
+    },
+    enddate: {
+      type: String,
       required: true
     },
     link: {
@@ -67,6 +89,11 @@ export default {
       default: 'blue-50'
     }
   },
+  data () {
+    return {
+      showDeleteModal: false
+    }
+  },
   computed: {
   },
   methods: {
@@ -80,6 +107,22 @@ export default {
       minutes = minutes < 10 ? '0' + minutes : minutes
       const strTime = hours + ':' + minutes + ' ' + ampm
       return strTime
+    },
+    async deleteEvent () {
+      try {
+        await this.$axios.$post('graphql',
+          {
+            query: deleteBootcamp(),
+            variables: {
+              id: this.bootcampid
+            }
+          }
+        )
+        this.showDeleteModal = false
+        this.$emit('fetch-events')
+      } catch (e) {
+        console.log(e.message)
+      }
     }
   }
 }

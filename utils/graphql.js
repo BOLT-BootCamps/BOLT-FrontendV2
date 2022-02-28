@@ -57,6 +57,7 @@ export const getBootcampNames = () => {
       bootcamps {
         pkiBootcampID,
         sBootcampName,
+        sDefaultZoomUrl
       }
     }
   `
@@ -124,6 +125,112 @@ export const deleteEvent = () => {
     $id: Int!
   ) {
     deleteEvent (id: $id)
+  }`
+  return mutation
+}
+
+// Bootcamnps
+
+export const getBootcamps = () => {
+  const query = `
+    query {
+      bootcamps {
+        pkiBootcampID,
+        sBootcampName,
+        sDescription,
+        dtStartDate,
+        dtEndDate,
+        sImageUrl,
+        sDefaultZoomUrl
+      }
+    }
+  `
+  return query
+}
+
+export const getBootcamp = () => {
+  const query = `
+    query GETBOOTCAMP($id: Int!) {
+      bootcamp(id: $id) {
+        pkiBootcampID,
+        sBootcampName,
+        sDescription,
+        dtStartDate,
+        dtEndDate,
+        sImageUrl,
+        sDefaultZoomUrl
+      }
+    }
+  `
+  return query
+}
+
+export const getBootcampZoomUrl = () => {
+  const query = `
+    query GETBOOTCAMPZOOMURL($id: Int!) {
+      bootcamp(id: $id) {
+        sDefaultZoomUrl
+      }
+    }
+  `
+  return query
+}
+
+export const addBootcamp = () => {
+  const mutation = `
+    mutation ADDBOOTCAMP(
+      $sBootcampName: String!, 
+      $sDescription: String!, 
+      $dtStartDate: String!, 
+      $dtEndDate: String!, 
+      $sImageUrl: String!,
+      $sDefaultZoomUrl: String!,
+      ) {
+      addBootcamp (bootcamp: {
+          sBootcampName: $sBootcampName,
+          sDescription: $sDescription,
+          dtStartDate: $dtStartDate,
+          dtEndDate: $dtEndDate,
+          sImageUrl: $sImageUrl,
+          sDefaultZoomUrl: $sDefaultZoomUrl
+        }
+      )
+    }
+  `
+  return mutation
+}
+
+export const editBootcamp = () => {
+  const mutation = `
+    mutation EDITBOOTCAMP(
+      $sBootcampName: String!, 
+      $sDescription: String!, 
+      $dtStartDate: String!, 
+      $dtEndDate: String!, 
+      $sImageUrl: String!,
+      $sDefaultZoomUrl: String!,
+      $pkiBootcampID: Int!,
+      ) {
+      updateBootcamp (bootcamp: {
+          sBootcampName: $sBootcampName,
+          sDescription: $sDescription,
+          dtStartDate: $dtStartDate,
+          dtEndDate: $dtEndDate,
+          sImageUrl: $sImageUrl,
+          sDefaultZoomUrl: $sDefaultZoomUrl,
+        },
+        id: $pkiBootcampID
+      )
+    }
+  `
+  return mutation
+}
+export const deleteBootcamp = () => {
+  const mutation = `
+  mutation DELETEBOOTCAMP(
+    $id: Int!
+  ) {
+    deleteBootcamp (id: $id)
   }`
   return mutation
 }
