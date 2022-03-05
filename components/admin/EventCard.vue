@@ -17,7 +17,7 @@
           {{ title }}
         </div>
         <p class="w-96">
-          {{ description.substring(0,200) }}...
+          {{ description }}
         </p>
         <div class="flex absolute bottom-4 space-x-2">
           <NuxtLink :to="'/admin/editevent/'+eventid">
@@ -40,7 +40,7 @@
       :dialog="'Are you sure you want to delete '+title"
       confirm-message="Yes"
       @close-modal="showDeleteModal=false"
-      @confirm-modal="deleteEvent"
+      @confirm-modal="callDeleteEvent"
     />
   </div>
 </template>
@@ -53,7 +53,7 @@ export default {
   props: {
     eventid: {
       type: Number,
-      required: true
+      default: -1
     },
     title: {
       type: String,
@@ -111,7 +111,7 @@ export default {
       const strTime = hours + ':' + minutes + ' ' + ampm
       return strTime
     },
-    async deleteEvent () {
+    async callDeleteEvent () {
       try {
         await this.$axios.$post('graphql',
           {

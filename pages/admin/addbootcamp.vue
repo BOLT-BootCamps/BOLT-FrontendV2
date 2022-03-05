@@ -9,19 +9,19 @@
           <h1 class="sort">
             Bootcamp Title
           </h1>
-          <input v-model="bootcamp.title" type="text" class="input-text">
+          <input v-model="bootcamp.sBootcampName" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
             Zoom Link
           </h1>
-          <input v-model="bootcamp.link" placeholder="Default Zoom Link" type="text" class="input-text">
+          <input v-model="bootcamp.sDefaultZoomUrl" placeholder="Default Zoom Link" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
             Bootcamp Description
           </h1>
-          <textarea v-model="bootcamp.description" rows="4" cols="50" class="input-text" />
+          <textarea v-model="bootcamp.sDescription" rows="4" cols="50" class="input-text" />
         </section>
         <section>
           <h1 class="sort">
@@ -33,7 +33,7 @@
           <h1 class="sort">
             Image Link
           </h1>
-          <input v-model="bootcamp.image" type="text" class="input-text">
+          <input v-model="bootcamp.sImageUrl" type="text" class="input-text">
         </section>
         <section class="absolute bottom-4 right-4 text-white">
           <button class="bg-green-500 px-2 py-2 rounded-md inline-block" @click="submitBootcamp()">
@@ -48,11 +48,13 @@
         Preview:
       </h1>
       <bootcamp-card
-        :title="bootcamp.title"
-        :description="bootcamp.description"
-        :image="bootcamp.image"
-        :datetime="bootcamp.datetime"
-        :link="bootcamp.link"
+        :title="bootcamp.sBootcampName"
+        :description="bootcamp.sDescription"
+        :image="bootcamp.sImageUrl"
+        :link="bootcamp.sDefaultZoomUrl"
+        :startdate="bootcamp.dtStartDate"
+        :enddate="bootcamp.dtEndDate"
+        :applicants="100"
       />
       <section />
     </section>
@@ -62,6 +64,7 @@
 <script>
 import BootcampCard from '~/components/admin/BootcampCard.vue'
 import RangePicker from '~/components/RangePicker.vue'
+import { addBootcamp } from '~/utils/graphql'
 export default {
   name: 'AdminAddBootcamp',
   components: { BootcampCard, RangePicker },
@@ -71,11 +74,12 @@ export default {
     return {
       bootcamp:
         {
-          title: '',
-          link: '',
-          description: '',
-          datetime: Date.now(),
-          image: ''
+          sBootcampName: '',
+          sDescription: '',
+          dtStartDate: new Date().toISOString(),
+          dtEndDate: new Date().toISOString(),
+          sImageUrl: '',
+          sDefaultZoomUrl: ''
         }
     }
   },
@@ -95,7 +99,28 @@ export default {
     this.$nuxt.$emit('current-link', 'Bootcamps')
   },
   methods: {
-    submitBootcamp () {
+    async submitBootcamp () {
+      if (this.submitted) {
+        return
+      }
+      this.submitted = true
+      try {
+        await this.$axios.$post('graphql',
+          {
+            query: addBootcamp(),
+            variables: {
+              ...this.bootcamp,
+              dtStartDate: new Date(this.bootcamp.dtStartDate).toISOString(),
+              dtEndDate: new Date(this.bootcamp.dtEndDate).toISOString()
+            }
+          })
+
+        this.$router.push({
+          path: '/admin/bootcamps'
+        })
+      } catch (e) {
+        console.log(e.message)
+      }
       console.log('submitted')
     }
   }

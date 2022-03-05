@@ -17,7 +17,7 @@
           {{ title }}
         </div>
         <p class="w-96">
-          {{ description.substring(0,200) }}...
+          {{ description }}
         </p>
         <div class="flex absolute bottom-4 space-x-2">
           <NuxtLink :to="'/admin/editbootcamp/'+bootcampid">
@@ -39,22 +39,22 @@
       title="Delete bootcamp"
       :dialog="'Are you sure want to delete ' + title"
       confirm-message="Yes"
-      @close-modal="showDelete=false"
-      @confirm-modal="deleteBootcamp"
+      @close-modal="showDeleteModal=false"
+      @confirm-modal="callDeleteBootcamp"
     />
   </div>
 </template>
 
 <script>
 import Modal from '~/components/Modal.vue'
-import { deleteBootcamp } from '~utils/graphql'
+import { deleteBootcamp } from '~/utils/graphql'
 
 export default {
   components: { Modal },
   props: {
     bootcampid: {
       type: Number,
-      required: true
+      default: -1
     },
     title: {
       type: String,
@@ -62,11 +62,11 @@ export default {
     },
     description: {
       type: String,
-      required: true
+      default: ''
     },
     image: {
       type: String,
-      required: true
+      default: ''
     },
     startdate: {
       type: String,
@@ -78,7 +78,7 @@ export default {
     },
     link: {
       type: String,
-      required: true
+      default: ''
     },
     applicants: {
       type: Number,
@@ -108,7 +108,7 @@ export default {
       const strTime = hours + ':' + minutes + ' ' + ampm
       return strTime
     },
-    async deleteEvent () {
+    async callDeleteBootcamp () {
       try {
         await this.$axios.$post('graphql',
           {
@@ -119,7 +119,7 @@ export default {
           }
         )
         this.showDeleteModal = false
-        this.$emit('fetch-events')
+        this.$emit('fetch-bootcamps')
       } catch (e) {
         console.log(e.message)
       }
