@@ -17,10 +17,12 @@
       <application-card
         v-for="(application, ind) in applications"
         :key="ind"
+        :applicationid="application.pkiApplicationID"
         :title="application.sApplicationName"
         :description="application.sDescription"
         :image="application.sImageUrl"
-        :datetime="application.dtStartDate"
+        :startdate="application.dtStartDate"
+        :enddate="application.dtEndDate"
         :form="application.sFormUrl"
         :applicants="application.iNumApplicants"
       />
@@ -55,7 +57,8 @@ export default {
         {
           sApplicationName: 'McGill Application',
           sDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          dtStartDate: Date.now(),
+          dtStartDate: new Date().toISOString(),
+          dtEndDate: new Date().toISOString(),
           iNumApplicants: 31,
           sFormUrl: 'form link',
           sImageUrl: 'https://media.istockphoto.com/photos/man-speaking-at-a-business-conference-picture-id499517325?b=1&k=20&m=499517325&s=170667a&w=0&h=jMCaZov25c5VR1CP-4axUdJPEKSpBWbzzWAubQS3-oo='
@@ -63,7 +66,8 @@ export default {
         {
           sApplicationName: 'UBC Application',
           sDescription: 'Lorem ipsum',
-          dtStartDate: Date.now(),
+          dtStartDate: new Date().toISOString(),
+          dtEndDate: new Date().toISOString(),
           iNumApplicants: 30,
           sFormUrl: 'form link',
           sImageUrl: 'image'
@@ -87,6 +91,16 @@ export default {
     this.$nuxt.$emit('current-link', 'Applications')
   },
   methods: {
+    async fetchData () {
+      let applications = []
+      try {
+        const response = await this.$axios.$post('graphql', { query: getApplications() })
+        applications = response.data.applications
+      } catch (e) {
+        console.log(e.message)
+      }
+      this.applications = applications
+    }
   }
 }
 </script>

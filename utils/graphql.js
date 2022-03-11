@@ -79,6 +79,7 @@ export const getApplications = () => {
         sApplicationName,
         sDescription,
         dtStartDate,
+        dtEndDate,
         sImageUrl,
         sFormUrl,
         iNumApplicants
@@ -86,4 +87,86 @@ export const getApplications = () => {
     }
   `
   return query
+}
+
+export const getApplication = () => {
+  const query = `
+    query GETAPPLICATION($id: Int!) {
+      application(id: $id) {
+        pkiApplicationID,
+        sApplicationName,
+        sDescription,
+        dtStartDate,
+        dtEndDate,
+        sImageUrl,
+        sFormUrl,
+        iNumApplicants
+      }
+    }
+  `
+  return query
+}
+
+export const addApplication = () => {
+  const mutation = `
+    mutation ADDAPPLICATION(
+      $sApplicationName: String!, 
+      $sDescription: String!, 
+      $dtStartDate: String!, 
+      $dtEndDate: String!, 
+      $sImageUrl: String!,
+      $sFormUrl: String!,
+      $fkiBootcampID: Int!,
+      ) {
+      addApplication (application: {
+          sApplicationName: $sApplicationName,
+          sDescription: $sDescription,
+          dtStartDate: $dtStartDate,
+          dtEndDate: $dtEndDate,
+          sImageUrl: $sImageUrl,
+          sFormUrl: $sFormUrl,
+          fkiBootcampID: $fkiBootcampID
+        }
+      )
+    }
+  `
+  return mutation
+}
+
+export const deleteApplication = () => {
+  const mutation = `
+  mutation DELETEAPPLICATION(
+    $id: Int!
+  ) {
+    deleteApplication (id: $id)
+  }`
+  return mutation
+}
+
+export const editApplication = () => {
+  const mutation = `
+    mutation EDITAPPLICATION(
+      $sApplicationName: String!, 
+      $sDescription: String!, 
+      $dtStartDate: String!, 
+      $dtEndDate: String!, 
+      $sImageUrl: String!,
+      $sFormUrl: String!,
+      $fkiBootcampID: Int!,
+      $pkiApplicationID: Int!,
+      ) {
+      updateApplication (application: {
+          sApplicationName: $sApplicationName,
+          sDescription: $sDescription,
+          dtStartDate: $dtStartDate,
+          dtEndDate: $dtEndDate,
+          sImageUrl: $sImageUrl,
+          sFormUrl: $sFormUrl,
+          fkiBootcampID: $fkiBootcampID
+        },
+        id: $pkiApplicationID
+      )
+    }
+  `
+  return mutation
 }
