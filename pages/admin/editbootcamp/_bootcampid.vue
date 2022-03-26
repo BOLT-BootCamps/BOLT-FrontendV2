@@ -87,7 +87,15 @@ export default {
   },
   data () {
     return {
-      bootcamps: {},
+      bootcamp: {
+        sBootcampName: '',
+        sDescription: '',
+        sImageUrl: '',
+        sDefaultZoomUrl: '',
+        dtStartDate: new Date().toISOString(),
+        dtEndDate: new Date().toISOString()
+
+      },
       submitted: false
     }
   },
@@ -126,6 +134,7 @@ export default {
           path: '/admin/bootcamps'
         })
       } catch (e) {
+        this.submitted = false
         console.log(e.message)
       }
     }

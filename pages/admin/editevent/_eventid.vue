@@ -27,7 +27,7 @@
           <h1 class="sort">
             Bootcamp
           </h1>
-          <select v-model="event.pkiBootcampID">
+          <select v-model="event.fkiBootcampID">
             <option disabled value="" class="input-text">
               Please Select
             </option>
@@ -108,7 +108,15 @@ export default {
   },
   data () {
     return {
-      event: {},
+      event: {
+        sEventName: '',
+        sDescription: '',
+        sImageUrl: '',
+        sBootcampName: '',
+        sZoomUrl: '',
+        dtStartDate: new Date().toISOString(),
+        dtEndDate: new Date().toISOString()
+      },
       bootcamps: [],
       submitted: false
     }

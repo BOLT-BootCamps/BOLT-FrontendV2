@@ -13,6 +13,8 @@ export const getProfile = (email) => {
   return query
 }
 
+// Events
+
 export const getEvents = () => {
   const query = `
     query {
@@ -51,19 +53,6 @@ export const getEvent = () => {
   return query
 }
 
-export const getBootcampNames = () => {
-  const query = `
-    query {
-      bootcamps {
-        pkiBootcampID,
-        sBootcampName,
-        sDefaultZoomUrl
-      }
-    }
-  `
-  return query
-}
-
 export const addEvent = () => {
   const mutation = `
     mutation ADDEVENT(
@@ -86,68 +75,6 @@ export const addEvent = () => {
           fkiBootcampID: $fkiBootcampID
         }
       )
-    }
-  `
-  return mutation
-}
-
-export const getApplications = () => {
-  const query = `
-    query {
-      applications {
-        pkiApplicationID,
-        sApplicationName,
-        sDescription,
-        dtStartDate,
-        dtEndDate,
-        sImageUrl,
-        sFormUrl,
-        iNumApplicants
-      }
-    }
-  `
-  return query
-}
-
-export const getApplication = () => {
-  const query = `
-    query GETAPPLICATION($id: Int!) {
-      application(id: $id) {
-        pkiApplicationID,
-        sApplicationName,
-        sDescription,
-        dtStartDate,
-        dtEndDate,
-        sImageUrl,
-        sFormUrl,
-        iNumApplicants
-      }
-    }
-  `
-  return query
-}
-
-export const addApplication = () => {
-  const mutation = `
-    mutation ADDAPPLICATION(
-      $sApplicationName: String!, 
-      $sDescription: String!, 
-      $dtStartDate: String!, 
-      $dtEndDate: String!, 
-      $sImageUrl: String!,
-      $sFormUrl: String!,
-      $fkiBootcampID: Int!,
-      ) {
-      addApplication (application: {
-          sApplicationName: $sApplicationName,
-          sDescription: $sDescription,
-          dtStartDate: $dtStartDate,
-          dtEndDate: $dtEndDate,
-          sImageUrl: $sImageUrl,
-          sFormUrl: $sFormUrl,
-          fkiBootcampID: $fkiBootcampID
-        }
-      )  
     }
   `
   return mutation
@@ -176,6 +103,95 @@ export const editEvent = () => {
         },
         id: $pkiEventID
       )
+    }
+  `
+  return mutation
+}
+
+export const deleteEvent = () => {
+  const mutation = `
+  mutation DELETEEVENT(
+    $id: Int!
+  ) {
+    deleteEvent (id: $id)
+  }`
+  return mutation
+}
+
+export const getBootcampNames = () => {
+  const query = `
+    query {
+      bootcamps {
+        pkiBootcampID,
+        sBootcampName,
+        sDefaultZoomUrl
+      }
+    }
+  `
+  return query
+}
+
+// Applications
+
+export const getApplications = () => {
+  const query = `
+    query {
+      applications {
+        pkiApplicationID,
+        sApplicationName,
+        sDescription,
+        dtStartDate,
+        dtEndDate,
+        sImageUrl,
+        sFormUrl,
+        iNumApplicants,
+        fkiBootcampID
+      }
+    }
+  `
+  return query
+}
+
+export const getApplication = () => {
+  const query = `
+    query GETAPPLICATION($id: Int!) {
+      application(id: $id) {
+        pkiApplicationID,
+        sApplicationName,
+        sDescription,
+        dtStartDate,
+        dtEndDate,
+        sImageUrl,
+        sFormUrl,
+        iNumApplicants,
+        fkiBootcampID
+      }
+    }
+  `
+  return query
+}
+
+export const addApplication = () => {
+  const mutation = `
+    mutation ADDAPPLICATION(
+      $sApplicationName: String!, 
+      $sDescription: String!, 
+      $dtStartDate: String!, 
+      $dtEndDate: String!, 
+      $sImageUrl: String!,
+      $sFormUrl: String!,
+      $fkiBootcampID: Int!,
+      ) {
+      addApplication (application: {
+          sApplicationName: $sApplicationName,
+          sDescription: $sDescription,
+          dtStartDate: $dtStartDate,
+          dtEndDate: $dtEndDate,
+          sImageUrl: $sImageUrl,
+          sFormUrl: $sFormUrl,
+          fkiBootcampID: $fkiBootcampID
+        }
+      )  
     }
   `
   return mutation
@@ -219,17 +235,7 @@ export const editApplication = () => {
   return mutation
 }
 
-export const deleteEvent = () => {
-  const mutation = `
-  mutation DELETEEVENT(
-    $id: Int!
-  ) {
-    deleteEvent (id: $id)
-  }`
-  return mutation
-}
-
-// Bootcamnps
+// Bootcamps
 
 export const getBootcamps = () => {
   const query = `
