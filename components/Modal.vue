@@ -50,7 +50,6 @@ export default {
   background-color: #000000da;
   z-index: 2;
 }
-
 .modal {
   text-align: center;
   background-color: white;
@@ -60,32 +59,26 @@ export default {
   padding: 60px 0;
   border-radius: 20px;
 }
-
 .close {
   margin: 10% 0 0 16px;
   cursor: pointer;
 }
-
 .close-img {
   width: 25px;
 }
-
 .check {
   width: 150px;
 }
-
 h6 {
   font-weight: 500;
   font-size: 28px;
   margin: 20px 0;
 }
-
 p {
   /* font-weight: 500; */
   font-size: 16px;
   margin: 20px 0;
 }
-
 .confirm-button {
   background-color: #ac003e;
   width: 150px;
@@ -95,7 +88,6 @@ p {
   border-radius: 16px;
   margin-top: 50px;
 }
-
 .back-button {
   width: 150px;
   height: 40px;
@@ -104,12 +96,10 @@ p {
   margin-top: 50px;
   @apply border-2 border-black;
 }
-
 .modal-fade-enter,
 .modal-fade-leave-to {
   opacity: 0;
 }
-
 .modal-fade-enter-active,
 .modal-fade-leave-active {
   transition: opacity 0.2s ease;
