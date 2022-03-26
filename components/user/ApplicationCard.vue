@@ -14,7 +14,7 @@
           {{ title }}
         </div>
         <p class="w-96">
-          {{ description.substring(0,200) }}...
+          {{ description ? description.substring(0,200) : "" }}...
         </p>
         <div class="flex absolute bottom-4 space-x-2">
           <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
@@ -35,15 +35,15 @@ export default {
   props: {
     title: {
       type: String,
-      required: true
+      default: ''
     },
     description: {
       type: String,
-      required: true
+      default: ''
     },
     image: {
       type: String,
-      required: true
+      default: ''
     },
     startdate: {
       type: String,
@@ -55,7 +55,7 @@ export default {
     },
     form: {
       type: String,
-      required: true
+      default: ''
     },
     colour: {
       type: String,

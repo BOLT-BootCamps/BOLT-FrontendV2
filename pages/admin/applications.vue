@@ -25,6 +25,7 @@
         :enddate="application.dtEndDate"
         :form="application.sFormUrl"
         :applicants="application.iNumApplicants"
+        @fetch-applications="fetchData"
       />
 
       <section />
