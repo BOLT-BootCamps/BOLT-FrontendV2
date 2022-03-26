@@ -40,7 +40,7 @@
       :dialog="'Are you sure you want to delete '+title"
       confirm-message="Yes"
       @close-modal="showDeleteModal=false"
-      @confirm-modal="deleteEvent"
+      @confirm-modal="callDeleteEvent"
     />
   </div>
 </template>
@@ -54,7 +54,7 @@ export default {
   props: {
     eventid: {
       type: Number,
-      required: true
+      default: -1
     },
     title: {
       type: String,
@@ -100,8 +100,9 @@ export default {
   },
   computed: {
   },
-  methods: { formatAMPM },
-    async deleteEvent () {
+  methods: {
+    formatAMPM,
+    async callDeleteEvent () {
       try {
         await this.$axios.$post('graphql',
           {
