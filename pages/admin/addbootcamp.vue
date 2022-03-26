@@ -86,7 +86,7 @@ export default {
   },
   head () {
     return {
-      title: 'AddBootcamp',
+      title: 'Add Bootcamp',
       meta: [
         {
           hid: 'description',

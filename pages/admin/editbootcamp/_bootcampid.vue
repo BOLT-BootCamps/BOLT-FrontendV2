@@ -101,7 +101,7 @@ export default {
   },
   head () {
     return {
-      title: 'EditBootcamp',
+      title: 'Edit Bootcamp',
       meta: [
         {
           hid: 'description',

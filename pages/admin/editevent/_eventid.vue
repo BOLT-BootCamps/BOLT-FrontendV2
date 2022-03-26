@@ -123,7 +123,7 @@ export default {
   },
   head () {
     return {
-      title: 'EditEvent',
+      title: 'Edit Event',
       meta: [
         {
           hid: 'description',

@@ -125,7 +125,7 @@ export default {
   },
   head () {
     return {
-      title: 'AddApplication',
+      title: 'Edit Application',
       meta: [
         {
           hid: 'description',

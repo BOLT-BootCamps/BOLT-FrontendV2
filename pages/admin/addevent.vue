@@ -113,7 +113,7 @@ export default {
   },
   head () {
     return {
-      title: 'AddEvent',
+      title: 'Add Event',
       meta: [
         {
           hid: 'description',
