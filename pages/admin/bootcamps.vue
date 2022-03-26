@@ -45,6 +45,9 @@ export default {
     try {
       const response = await $axios.$post('graphql', { query: getBootcamps() })
       bootcamps = response.data.bootcamps
+      bootcamps = bootcamps.filter(function (currentElement) {
+        return currentElement.pkiBootcampID > 0
+      })
     } catch (e) {
       console.log(e.message)
     }
@@ -78,6 +81,9 @@ export default {
       try {
         const response = await this.$axios.$post('graphql', { query: getBootcamps() })
         bootcamps = response.data.bootcamps
+        bootcamps = bootcamps.filter(function (currentElement) {
+          return currentElement.pkiBootcampID > 0
+        })
       } catch (e) {
         console.log(e.message)
       }
