@@ -20,10 +20,12 @@
           {{ description ? description.substring(0,200) : '' }}...
         </p>
         <div class="flex absolute bottom-4 space-x-2">
-          <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
-            Edit Event
-          </button>
-          <button class="border-2 border-red-500 rounded-md py-2 px-4 hover:bg-red-500 hover:text-white transition-colors font-medium">
+          <NuxtLink :to="'/admin/editevent/'+eventid">
+            <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
+              Edit Event
+            </button>
+          </NuxtLink>
+          <button class="border-2 border-red-500 rounded-md py-2 px-4 hover:bg-red-500 hover:text-white transition-colors font-medium" @click="showDeleteModal = true">
             Delete Event
           </button>
         </div>
@@ -32,13 +34,28 @@
         <img :src="image" alt="Event Image" class="w-96 object-cover h-full rounded-lg bg-blue-400">
       </section>
     </section>
+    <Modal
+      v-show="showDeleteModal"
+      title="Delete event"
+      :dialog="'Are you sure you want to delete '+title"
+      confirm-message="Yes"
+      @close-modal="showDeleteModal=false"
+      @confirm-modal="deleteEvent"
+    />
   </div>
 </template>
 
 <script>
 import { formatAMPM } from '~/utils/date'
+import Modal from '~/components/Modal.vue'
+import { deleteEvent } from '~/utils/graphql'
 export default {
+  components: { Modal },
   props: {
+    eventid: {
+      type: Number,
+      required: true
+    },
     title: {
       type: String,
       required: true
@@ -65,12 +82,10 @@ export default {
     },
     bootcamp: {
       type: String,
-      required: false,
       default: ''
     },
     bootcampid: {
       type: Number,
-      required: false,
       default: 0
     },
     colour: {
@@ -78,9 +93,31 @@ export default {
       default: 'blue-50'
     }
   },
+  data () {
+    return {
+      showDeleteModal: false
+    }
+  },
   computed: {
   },
-  methods: { formatAMPM }
+  methods: { formatAMPM },
+    async deleteEvent () {
+      try {
+        await this.$axios.$post('graphql',
+          {
+            query: deleteEvent(),
+            variables: {
+              id: this.eventid
+            }
+          }
+        )
+        this.showDeleteModal = false
+        this.$emit('fetch-events')
+      } catch (e) {
+        console.log(e.message)
+      }
+    }
+  }
 }
 </script>
 

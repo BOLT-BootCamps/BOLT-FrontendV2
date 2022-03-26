@@ -48,14 +48,16 @@
       <event-card
         v-for="(event, ind) in events"
         :key="ind"
+        :eventid="event.pkiEventID"
         :title="event.sEventName"
         :description="event.sDescription"
         :image="event.sImageUrl"
         :link="event.sZoomUrl"
         :startdate="event.dtStartDate"
         :enddate="event.dtEndDate"
-        :bootcamp="event.bootcampName"
+        :bootcamp="event.sBootcampName"
         :bootcampid="event.fkiBootcampID"
+        @fetch-events="fetchData"
       />
 
       <section />
@@ -103,6 +105,16 @@ export default {
     this.$nuxt.$emit('current-link', 'Events')
   },
   methods: {
+    async fetchData () {
+      let events = []
+      try {
+        const response = await this.$axios.$post('graphql', { query: getEvents() })
+        events = response.data.events
+      } catch (e) {
+        console.log(e.message)
+      }
+      this.events = events
+    }
   }
 }
 </script>
