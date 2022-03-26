@@ -25,6 +25,7 @@
         :startdate="bootcamp.dtStartDate"
         :enddate="bootcamp.dtEndDate"
         :applicants="bootcamp.applicants"
+        @fetch-bootcamps="fetchData"
       />
     </section>
   </div>
@@ -72,6 +73,16 @@ export default {
     this.$nuxt.$emit('current-link', 'Bootcamps')
   },
   methods: {
+    async fetchData () {
+      let bootcamps = []
+      try {
+        const response = await this.$axios.$post('graphql', { query: getBootcamps() })
+        bootcamps = response.data.bootcamps
+      } catch (e) {
+        console.log(e.message)
+      }
+      this.bootcamps = bootcamps
+    }
   }
 }
 </script>
