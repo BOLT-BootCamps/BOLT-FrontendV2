@@ -2,10 +2,10 @@
   <div class="event-card">
     <section class="event-glance">
       <div class="glance-text">
-        {{ new Date(datetime).toDateString() }}
+        {{ new Date(startdate).toDateString() }}
       </div>
       <div class="date py-4">
-        {{ formatAMPM(datetime) }}
+        {{ formatAMPM(startdate) }}
       </div>
     </section>
     <section class="p-4 flex w-full relative space-y-2">
@@ -14,7 +14,7 @@
           {{ title }}
         </div>
         <p class="w-96">
-          {{ description.substring(0,200) }}...
+          {{ description ? description.substring(0,200) : "" }}...
         </p>
         <div class="flex absolute bottom-4 space-x-2">
           <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
@@ -30,27 +30,32 @@
 </template>
 
 <script>
+import { formatAMPM } from '~/utils/date'
 export default {
   props: {
     title: {
       type: String,
-      required: true
+      default: ''
     },
     description: {
       type: String,
-      required: true
+      default: ''
     },
     image: {
       type: String,
+      default: ''
+    },
+    startdate: {
+      type: String,
       required: true
     },
-    datetime: {
-      type: Number,
+    enddate: {
+      type: String,
       required: true
     },
     form: {
       type: String,
-      required: true
+      default: ''
     },
     colour: {
       type: String,
@@ -60,17 +65,7 @@ export default {
   computed: {
   },
   methods: {
-    formatAMPM (datetime) {
-      const date = new Date(datetime)
-      let hours = date.getHours()
-      let minutes = date.getMinutes()
-      const ampm = hours >= 12 ? 'PM' : 'AM'
-      hours = hours % 12
-      hours = hours || 12 // the hour '0' should be '12'
-      minutes = minutes < 10 ? '0' + minutes : minutes
-      const strTime = hours + ':' + minutes + ' ' + ampm
-      return strTime
-    }
+    formatAMPM
   }
 }
 </script>

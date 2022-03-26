@@ -17,7 +17,7 @@
           {{ title }}
         </div>
         <p class="w-96">
-          {{ description.substring(0,200) }}...
+          {{ description ? description.substring(0,200) : '' }}...
         </p>
         <div class="flex absolute bottom-4 space-x-2">
           <NuxtLink :to="'/admin/editevent/'+eventid">
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { formatAMPM } from '~/utils/date'
 import Modal from '~/components/Modal.vue'
 import { deleteEvent } from '~/utils/graphql'
 export default {
@@ -99,18 +100,7 @@ export default {
   },
   computed: {
   },
-  methods: {
-    formatAMPM (datetime) {
-      const date = new Date(datetime)
-      let hours = date.getHours()
-      let minutes = date.getMinutes()
-      const ampm = hours >= 12 ? 'PM' : 'AM'
-      hours = hours % 12
-      hours = hours || 12 // the hour '0' should be '12'
-      minutes = minutes < 10 ? '0' + minutes : minutes
-      const strTime = hours + ':' + minutes + ' ' + ampm
-      return strTime
-    },
+  methods: { formatAMPM },
     async deleteEvent () {
       try {
         await this.$axios.$post('graphql',

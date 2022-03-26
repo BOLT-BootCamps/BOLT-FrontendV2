@@ -2,10 +2,10 @@
   <div class="event-card">
     <section class="event-glance">
       <div class="glance-text">
-        {{ new Date(datetime).toDateString() }}
+        {{ new Date(startdate).toDateString() }}
       </div>
       <div class="date py-4">
-        {{ formatAMPM(datetime) }}
+        {{ formatAMPM(startdate) }}
       </div>
       <div class="glance-text">
         {{ applicants }} Applicants
@@ -17,13 +17,15 @@
           {{ title }}
         </div>
         <p class="w-96">
-          {{ description.substring(0,200) }}...
+          {{ description ? description.substring(0,200): '' }}...
         </p>
         <div class="flex absolute bottom-4 space-x-2">
-          <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
-            Edit Application
-          </button>
-          <button class="border-2 border-red-500 rounded-md py-2 px-4 hover:bg-red-500 hover:text-white transition-colors font-medium">
+          <NuxtLink :to="'/admin/editapplication/'+applicationid">
+            <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
+              Edit Application
+            </button>
+          </NuxtLink>
+          <button class="border-2 border-red-500 rounded-md py-2 px-4 hover:bg-red-500 hover:text-white transition-colors font-medium" @click="showDeleteModal = true">
             Delete Application
           </button>
         </div>
@@ -32,31 +34,51 @@
         <img :src="image" alt="Event Image" class="w-96 object-cover h-full rounded-lg bg-blue-400">
       </section>
     </section>
+    <Modal
+      v-show="showDeleteModal"
+      title="Delete event"
+      :dialog="'Are you sure you want to delete '+title"
+      confirm-message="Yes"
+      @close-modal="showDeleteModal=false"
+      @confirm-modal="deleteApplication"
+    />
   </div>
 </template>
 
 <script>
+import { formatAMPM } from '~/utils/date'
+import Modal from '~/components/Modal.vue'
+import { deleteApplication } from '~/utils/graphql'
 export default {
+  components: { Modal },
   props: {
+    applicationid: {
+      type: Number,
+      default: -1
+    },
     title: {
       type: String,
       required: true
     },
     description: {
       type: String,
-      required: true
+      default: ''
     },
     image: {
       type: String,
+      default: ''
+    },
+    startdate: {
+      type: String,
       required: true
     },
-    datetime: {
-      type: Number,
+    enddate: {
+      type: String,
       required: true
     },
     form: {
       type: String,
-      required: true
+      default: ''
     },
     applicants: {
       type: Number,
@@ -67,19 +89,30 @@ export default {
       default: 'blue-50'
     }
   },
+  data () {
+    return {
+      showDeleteModal: false
+    }
+  },
   computed: {
   },
   methods: {
-    formatAMPM (datetime) {
-      const date = new Date(datetime)
-      let hours = date.getHours()
-      let minutes = date.getMinutes()
-      const ampm = hours >= 12 ? 'PM' : 'AM'
-      hours = hours % 12
-      hours = hours || 12 // the hour '0' should be '12'
-      minutes = minutes < 10 ? '0' + minutes : minutes
-      const strTime = hours + ':' + minutes + ' ' + ampm
-      return strTime
+    formatAMPM,
+    async deleteApplication () {
+      try {
+        await this.$axios.$post('graphql',
+          {
+            query: deleteApplication(),
+            variables: {
+              id: this.applicationid
+            }
+          }
+        )
+        this.showDeleteModal = false
+        this.$emit('fetch-applications')
+      } catch (e) {
+        console.log(e.message)
+      }
     }
   }
 }
