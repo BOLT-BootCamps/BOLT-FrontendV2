@@ -17,47 +17,46 @@
       <bootcamp-card
         v-for="(bootcamp, ind) in bootcamps"
         :key="ind"
-        :title="bootcamp.title"
-        :description="bootcamp.description"
-        :image="bootcamp.image"
-        :link="bootcamp.link"
-        :datetime="bootcamp.datetime"
+        :bootcampid="bootcamp.pkiBootcampID"
+        :title="bootcamp.sBootcampName"
+        :description="bootcamp.sDescription"
+        :image="bootcamp.sImageUrl"
+        :link="bootcamp.sDefaultZoomUrl"
+        :startdate="bootcamp.dtStartDate"
+        :enddate="bootcamp.dtEndDate"
         :applicants="bootcamp.applicants"
+        @fetch-bootcamps="fetchData"
       />
-
-      <section />
     </section>
   </div>
 </template>
 
 <script>
 import BootcampCard from '~/components/admin/BootcampCard.vue'
+import { getBootcamps } from '~/utils/graphql'
 export default {
   name: 'AdminBootcamps',
   components: { BootcampCard },
   layout: 'admin',
   middleware: 'auth',
+  async asyncData ({ params, $axios }) {
+    let bootcamps = []
+
+    try {
+      const response = await $axios.$post('graphql', { query: getBootcamps() })
+      bootcamps = response.data.bootcamps
+      bootcamps = bootcamps.filter(function (currentElement) {
+        return currentElement.pkiBootcampID > 0
+      })
+    } catch (e) {
+      console.log(e.message)
+    }
+
+    return { bootcamps }
+  },
   data () {
     return {
-      bootcamps: [
-        {
-          title: 'McGill Bootcamp',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          datetime: Date.now(),
-          link: 'Zoom',
-          applicants: 100,
-          image: 'https://media.istockphoto.com/photos/man-speaking-at-a-business-conference-picture-id499517325?b=1&k=20&m=499517325&s=170667a&w=0&h=jMCaZov25c5VR1CP-4axUdJPEKSpBWbzzWAubQS3-oo='
-        },
-        {
-          title: 'UBC Bootcamp',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          datetime: Date.now(),
-          link: 'Zoom',
-          applicants: 100,
-          image: 'https://media.istockphoto.com/photos/man-speaking-at-a-business-conference-picture-id499517325?b=1&k=20&m=499517325&s=170667a&w=0&h=jMCaZov25c5VR1CP-4axUdJPEKSpBWbzzWAubQS3-oo='
-        }
-
-      ]
+      bootcamps: []
     }
   },
 
@@ -77,6 +76,19 @@ export default {
     this.$nuxt.$emit('current-link', 'Bootcamps')
   },
   methods: {
+    async fetchData () {
+      let bootcamps = []
+      try {
+        const response = await this.$axios.$post('graphql', { query: getBootcamps() })
+        bootcamps = response.data.bootcamps
+        bootcamps = bootcamps.filter(function (currentElement) {
+          return currentElement.pkiBootcampID > 0
+        })
+      } catch (e) {
+        console.log(e.message)
+      }
+      this.bootcamps = bootcamps
+    }
   }
 }
 </script>

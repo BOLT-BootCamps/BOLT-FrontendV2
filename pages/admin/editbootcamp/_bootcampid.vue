@@ -2,9 +2,9 @@
   <div class="p-8">
     <section class="flex flex-col space-y-4">
       <h1 class="title pb-4">
-        Add Bootcamp
+        Edit Bootcamp
       </h1>
-      <section class="grid grid-cols-2 gap-4 bg-gray-50 relative w-full p-4 shadow-md">
+      <section class="grid grid-cols-2 gap-4 bg-gray-50 relative w-full p-4">
         <section>
           <h1 class="sort">
             Bootcamp Title
@@ -15,7 +15,7 @@
           <h1 class="sort">
             Zoom Link
           </h1>
-          <input v-model="bootcamp.sDefaultZoomUrl" placeholder="Default Zoom Link" type="text" class="input-text">
+          <input v-model="bootcamp.sDefaultZoomUrl" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
@@ -37,7 +37,7 @@
         </section>
         <section class="absolute bottom-4 right-4 text-white">
           <button class="bg-green-500 px-2 py-2 rounded-md inline-block" @click="submitBootcamp()">
-            Submit
+            Save
           </button>
           <NuxtLink class="bg-red-500 px-2 py-2 rounded-md inline-block" to="/admin/bootcamps">
             Discard
@@ -64,34 +64,49 @@
 <script>
 import BootcampCard from '~/components/admin/BootcampCard.vue'
 import RangePicker from '~/components/RangePicker.vue'
-import { addBootcamp } from '~/utils/graphql'
+import { editBootcamp, getBootcamp } from '~/utils/graphql'
+
 export default {
-  name: 'AdminAddBootcamp',
+  name: 'AdminEditBootcamps',
   components: { BootcampCard, RangePicker },
   layout: 'admin',
   middleware: 'auth',
+  async asyncData ({ params, $axios }) {
+    let bootcamp = {}
+    try {
+      const response = await $axios.$post('graphql',
+        {
+          query: getBootcamp(),
+          variables: { id: parseInt(params.bootcampid) }
+        })
+      bootcamp = response.data.bootcamp
+    } catch (e) {
+      console.log(e.message)
+    }
+    return { bootcamp }
+  },
   data () {
     return {
-      bootcamp:
-        {
-          sBootcampName: '',
-          sDescription: '',
-          dtStartDate: new Date().toISOString(),
-          dtEndDate: new Date().toISOString(),
-          sImageUrl: '',
-          sDefaultZoomUrl: ''
-        },
+      bootcamp: {
+        sBootcampName: '',
+        sDescription: '',
+        sImageUrl: '',
+        sDefaultZoomUrl: '',
+        dtStartDate: new Date().toISOString(),
+        dtEndDate: new Date().toISOString()
+
+      },
       submitted: false
     }
   },
   head () {
     return {
-      title: 'Add Bootcamp',
+      title: 'Edit Bootcamp',
       meta: [
         {
           hid: 'description',
           name: 'description',
-          content: 'BOLT Add Bootcamp'
+          content: 'BOLT Edit Bootcamp'
         }
       ]
     }
@@ -108,18 +123,18 @@ export default {
       try {
         await this.$axios.$post('graphql',
           {
-            query: addBootcamp(),
+            query: editBootcamp(),
             variables: {
               ...this.bootcamp,
               dtStartDate: new Date(this.bootcamp.dtStartDate).toISOString(),
               dtEndDate: new Date(this.bootcamp.dtEndDate).toISOString()
             }
           })
-
         this.$router.push({
           path: '/admin/bootcamps'
         })
       } catch (e) {
+        this.submitted = false
         console.log(e.message)
       }
     }

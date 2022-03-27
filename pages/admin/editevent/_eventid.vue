@@ -2,32 +2,32 @@
   <div class="p-8">
     <section class="flex flex-col space-y-4">
       <h1 class="title pb-4">
-        Add Application
+        Edit Event
       </h1>
       <section class="grid grid-cols-2 gap-4 bg-gray-50 relative w-full p-4">
         <section>
           <h1 class="sort">
-            Application Title
+            Event Title
           </h1>
-          <input v-model="application.sApplicationName" type="text" class="input-text">
+          <input v-model="event.sEventName" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
-            Application Description
+            Zoom Link
           </h1>
-          <textarea v-model="application.sDescription" rows="4" cols="50" class="input-text" />
+          <input v-model="event.sZoomUrl" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
-            Form Link
+            Event Description
           </h1>
-          <input v-model="application.sFormUrl" type="text" class="input-text">
+          <textarea v-model="event.sDescription" rows="4" cols="50" class="input-text" />
         </section>
         <section>
           <h1 class="sort">
             Bootcamp
           </h1>
-          <select v-model="application.fkiBootcampID">
+          <select v-model="event.fkiBootcampID">
             <option disabled value="" class="input-text">
               Please Select
             </option>
@@ -46,13 +46,13 @@
           <h1 class="sort">
             Image Link
           </h1>
-          <input v-model="application.sImageUrl" type="text" class="input-text">
+          <input v-model="event.sImageUrl" type="text" class="input-text">
         </section>
         <section class="absolute bottom-4 right-4 text-white">
-          <button class="bg-green-500 px-2 py-2 rounded-md inline-block" @click="submitApplication()">
-            Submit
+          <button class="bg-green-500 px-2 py-2 rounded-md inline-block" @click="submitEvent()">
+            Save
           </button>
-          <NuxtLink class="bg-red-500 px-2 py-2 rounded-md inline-block" to="/admin/applications">
+          <NuxtLink class="bg-red-500 px-2 py-2 rounded-md inline-block" to="/admin/events">
             Discard
           </NuxtLink>
         </section>
@@ -60,13 +60,14 @@
       <h1 class="sort">
         Preview:
       </h1>
-      <application-card
-        :title="application.sApplicationName"
-        :description="application.sDescription"
-        :image="application.sImageUrl"
-        :startdate="application.dtStartDate"
-        :enddate="application.dtEndDate"
-        :form="application.sFormUrl"
+      <event-card
+        :title="event.sEventName"
+        :description="event.sDescription"
+        :image="event.sImageUrl"
+        :bootcamp="event.sBootcampName"
+        :link="event.sZoomUrl"
+        :startdate="event.dtStartDate"
+        :enddate="event.dtEndDate"
       />
       <section />
     </section>
@@ -74,12 +75,13 @@
 </template>
 
 <script>
-import ApplicationCard from '~/components/user/ApplicationCard.vue'
+import EventCard from '~/components/user/EventCard.vue'
 import RangePicker from '~/components/RangePicker.vue'
-import { addApplication, getBootcampNames } from '~/utils/graphql'
+import { editEvent, getEvent, getBootcampNames } from '~/utils/graphql'
+
 export default {
-  name: 'AdminAddApplication',
-  components: { ApplicationCard, RangePicker },
+  name: 'AdminEditEvents',
+  components: { EventCard, RangePicker },
   layout: 'admin',
   middleware: 'auth',
   async asyncData ({ params, $axios }) {
@@ -90,43 +92,52 @@ export default {
     } catch (e) {
       console.log(e.message)
     }
-    return { bootcamps }
+
+    let event = {}
+    try {
+      const response = await $axios.$post('graphql',
+        {
+          query: getEvent(),
+          variables: { id: parseInt(params.eventid) }
+        })
+      event = response.data.event
+    } catch (e) {
+      console.log(e.message)
+    }
+    return { bootcamps, event }
   },
   data () {
     return {
-      application:
-        {
-          sApplicationName: '',
-          sZoomLink: '',
-          sDescription: '',
-          dtStartDate: new Date().toISOString(),
-          dtEndDate: new Date().toISOString(),
-          sFormUrl: '',
-          sImageUrl: '',
-          sBootcampName: '',
-          fkiBootcampID: 0
-        },
+      event: {
+        sEventName: '',
+        sDescription: '',
+        sImageUrl: '',
+        sBootcampName: '',
+        sZoomUrl: '',
+        dtStartDate: new Date().toISOString(),
+        dtEndDate: new Date().toISOString()
+      },
       bootcamps: [],
       submitted: false
     }
   },
   head () {
     return {
-      title: 'Add Application',
+      title: 'Edit Event',
       meta: [
         {
           hid: 'description',
           name: 'description',
-          content: 'BOLT Add Application'
+          content: 'BOLT Edit Event'
         }
       ]
     }
   },
   mounted () {
-    this.$nuxt.$emit('current-link', 'Applications')
+    this.$nuxt.$emit('current-link', 'Events')
   },
   methods: {
-    async submitApplication () {
+    async submitEvent () {
       if (this.submitted) {
         return
       }
@@ -134,15 +145,15 @@ export default {
       try {
         await this.$axios.$post('graphql',
           {
-            query: addApplication(),
+            query: editEvent(),
             variables: {
-              ...this.application,
-              dtStartDate: new Date(this.application.dtStartDate).toISOString(),
-              dtEndDate: new Date(this.application.dtEndDate).toISOString()
+              ...this.event,
+              dtStartDate: new Date(this.event.dtStartDate).toISOString(),
+              dtEndDate: new Date(this.event.dtEndDate).toISOString()
             }
           })
         this.$router.push({
-          path: '/admin/applications/'
+          path: '/admin/events'
         })
       } catch (e) {
         console.log(e.message)

@@ -9,25 +9,32 @@
           <h1 class="sort">
             Event Title
           </h1>
-          <input v-model="event.title" type="text" class="input-text">
+          <input v-model="event.sEventName" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
             Zoom Link
           </h1>
-          <input v-model="event.link" type="text" class="input-text">
+          <input v-model="event.sZoomUrl" type="text" class="input-text">
         </section>
         <section>
           <h1 class="sort">
             Event Description
           </h1>
-          <textarea v-model="event.description" rows="4" cols="50" class="input-text" />
+          <textarea v-model="event.sDescription" rows="4" cols="50" class="input-text" />
         </section>
         <section>
           <h1 class="sort">
             Bootcamp
           </h1>
-          <input v-model="event.bootcamp" type="text" class="input-text">
+          <select v-model="event.bootcamp">
+            <option disabled value="" class="input-text">
+              Please Select
+            </option>
+            <option v-for="(bootcamp,id) in bootcamps" :key="id" :value="bootcamp.pkiBootcampID" class="input-text">
+              {{ bootcamp.sBootcampName }}
+            </option>
+          </select>
         </section>
         <section>
           <h1 class="sort">
@@ -39,7 +46,7 @@
           <h1 class="sort">
             Image Link
           </h1>
-          <input v-model="event.image" type="text" class="input-text">
+          <input v-model="event.sImageUrl" type="text" class="input-text">
         </section>
         <section class="absolute bottom-4 right-4 text-white">
           <button class="bg-green-500 px-2 py-2 rounded-md inline-block" @click="submitEvent()">
@@ -54,12 +61,13 @@
         Preview:
       </h1>
       <event-card
-        :title="event.title"
-        :description="event.description"
-        :image="event.image"
-        :link="event.link"
-        :datetime="event.datetime"
-        :bootcamp="event.bootcamp"
+        :title="event.sEventName"
+        :description="event.sDescription"
+        :image="event.sImageUrl"
+        :bootcamp="event.sBootcampName"
+        :link="event.sZoomUrl"
+        :startdate="event.dtStartDate"
+        :enddate="event.dtEndDate"
       />
       <section />
     </section>
@@ -69,27 +77,43 @@
 <script>
 import EventCard from '~/components/user/EventCard.vue'
 import RangePicker from '~/components/RangePicker.vue'
+import { addEvent, getBootcampNames } from '~/utils/graphql'
+
 export default {
   name: 'AdminAddEvents',
   components: { EventCard, RangePicker },
   layout: 'admin',
   middleware: 'auth',
+  async asyncData ({ params, $axios }) {
+    let bootcamps = []
+    try {
+      const response = await $axios.$post('graphql', { query: getBootcampNames() })
+      bootcamps = response.data.bootcamps
+    } catch (e) {
+      console.log(e.message)
+    }
+    return { bootcamps }
+  },
   data () {
     return {
       event:
         {
-          title: '',
-          link: '',
-          description: '',
-          datetime: Date.now(),
-          bootcamp: '',
-          image: ''
-        }
+          sEventName: '',
+          sDescription: '',
+          dtStartDate: new Date().toISOString(),
+          dtEndDate: new Date().toISOString(),
+          sImageUrl: '',
+          sZoomUrl: '',
+          fkiBootcampID: 0,
+          sBootcampName: ''
+        },
+      bootcamps: [],
+      submitted: false
     }
   },
   head () {
     return {
-      title: 'AddEvent',
+      title: 'Add Event',
       meta: [
         {
           hid: 'description',
@@ -103,8 +127,27 @@ export default {
     this.$nuxt.$emit('current-link', 'Events')
   },
   methods: {
-    submitEvent () {
-      console.log('submitted')
+    async submitEvent () {
+      if (this.submitted) {
+        return
+      }
+      this.submitted = true
+      try {
+        await this.$axios.$post('graphql',
+          {
+            query: addEvent(),
+            variables: {
+              ...this.event,
+              dtStartDate: new Date(this.event.dtStartDate).toISOString(),
+              dtEndDate: new Date(this.event.dtEndDate).toISOString()
+            }
+          })
+        this.$router.push({
+          path: '/admin/events'
+        })
+      } catch (e) {
+        console.log(e.message)
+      }
     }
   }
 }

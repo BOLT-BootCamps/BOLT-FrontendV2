@@ -2,7 +2,7 @@
   <div class="p-8">
     <section class="flex flex-col space-y-4">
       <h1 class="title pb-4">
-        Add Application
+        Edit Application
       </h1>
       <section class="grid grid-cols-2 gap-4 bg-gray-50 relative w-full p-4">
         <section>
@@ -76,9 +76,9 @@
 <script>
 import ApplicationCard from '~/components/user/ApplicationCard.vue'
 import RangePicker from '~/components/RangePicker.vue'
-import { addApplication, getBootcampNames } from '~/utils/graphql'
+import { editApplication, getApplication, getBootcampNames } from '~/utils/graphql'
 export default {
-  name: 'AdminAddApplication',
+  name: 'AdminEditApplication',
   components: { ApplicationCard, RangePicker },
   layout: 'admin',
   middleware: 'auth',
@@ -90,7 +90,20 @@ export default {
     } catch (e) {
       console.log(e.message)
     }
-    return { bootcamps }
+
+    let application = {}
+    try {
+      const response = await $axios.$post('graphql',
+        {
+          query: getApplication(),
+          variables: { id: parseInt(params.applicationid) }
+        })
+      application = response.data.application
+    } catch (e) {
+      console.log(e.message)
+    }
+
+    return { bootcamps, application }
   },
   data () {
     return {
@@ -112,7 +125,7 @@ export default {
   },
   head () {
     return {
-      title: 'Add Application',
+      title: 'Edit Application',
       meta: [
         {
           hid: 'description',
@@ -134,7 +147,7 @@ export default {
       try {
         await this.$axios.$post('graphql',
           {
-            query: addApplication(),
+            query: editApplication(),
             variables: {
               ...this.application,
               dtStartDate: new Date(this.application.dtStartDate).toISOString(),

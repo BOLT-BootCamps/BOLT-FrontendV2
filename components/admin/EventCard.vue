@@ -2,10 +2,10 @@
   <div class="event-card">
     <section class="event-glance">
       <div class="glance-text">
-        {{ new Date(datetime).toDateString() }}
+        {{ new Date(startdate).toDateString() }}
       </div>
       <div class="date py-4">
-        {{ formatAMPM(datetime) }}
+        {{ formatAMPM(startdate) }}
       </div>
       <div class="glance-text">
         {{ bootcamp }}
@@ -17,13 +17,15 @@
           {{ title }}
         </div>
         <p class="w-96">
-          {{ description.substring(0,200) }}...
+          {{ description ? description.substring(0,200) : '' }}...
         </p>
         <div class="flex absolute bottom-4 space-x-2">
-          <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
-            Edit Event
-          </button>
-          <button class="border-2 border-red-500 rounded-md py-2 px-4 hover:bg-red-500 hover:text-white transition-colors font-medium">
+          <NuxtLink :to="'/admin/editevent/'+eventid">
+            <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
+              Edit Event
+            </button>
+          </NuxtLink>
+          <button class="border-2 border-red-500 rounded-md py-2 px-4 hover:bg-red-500 hover:text-white transition-colors font-medium" @click="showDeleteModal = true">
             Delete Event
           </button>
         </div>
@@ -32,54 +34,89 @@
         <img :src="image" alt="Event Image" class="w-96 object-cover h-full rounded-lg bg-blue-400">
       </section>
     </section>
+    <Modal
+      v-show="showDeleteModal"
+      title="Delete event"
+      :dialog="'Are you sure you want to delete '+title"
+      confirm-message="Yes"
+      @close-modal="showDeleteModal=false"
+      @confirm-modal="callDeleteEvent"
+    />
   </div>
 </template>
 
 <script>
+import { formatAMPM } from '~/utils/date'
+import Modal from '~/components/Modal.vue'
+import { deleteEvent } from '~/utils/graphql'
 export default {
+  components: { Modal },
   props: {
+    eventid: {
+      type: Number,
+      default: -1
+    },
     title: {
       type: String,
       required: true
     },
     description: {
       type: String,
-      required: true
+      default: ''
     },
     image: {
       type: String,
+      default: ''
+    },
+    startdate: {
+      type: String,
       required: true
     },
-    datetime: {
-      type: Number,
+    enddate: {
+      type: String,
       required: true
     },
     link: {
       type: String,
-      required: true
+      default: ''
     },
     bootcamp: {
       type: String,
-      required: true
+      default: ''
+    },
+    bootcampid: {
+      type: Number,
+      default: 0
     },
     colour: {
       type: String,
       default: 'blue-50'
     }
   },
+  data () {
+    return {
+      showDeleteModal: false
+    }
+  },
   computed: {
   },
   methods: {
-    formatAMPM (datetime) {
-      const date = new Date(datetime)
-      let hours = date.getHours()
-      let minutes = date.getMinutes()
-      const ampm = hours >= 12 ? 'PM' : 'AM'
-      hours = hours % 12
-      hours = hours || 12 // the hour '0' should be '12'
-      minutes = minutes < 10 ? '0' + minutes : minutes
-      const strTime = hours + ':' + minutes + ' ' + ampm
-      return strTime
+    formatAMPM,
+    async callDeleteEvent () {
+      try {
+        await this.$axios.$post('graphql',
+          {
+            query: deleteEvent(),
+            variables: {
+              id: this.eventid
+            }
+          }
+        )
+        this.showDeleteModal = false
+        this.$emit('fetch-events')
+      } catch (e) {
+        console.log(e.message)
+      }
     }
   }
 }

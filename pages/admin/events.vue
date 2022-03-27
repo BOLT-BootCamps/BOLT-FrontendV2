@@ -48,12 +48,16 @@
       <event-card
         v-for="(event, ind) in events"
         :key="ind"
-        :title="event.name"
-        :description="event.description"
-        :image="event.image"
-        :link="event.link"
-        :datetime="event.start_date"
-        :bootcamp="event.bootcamp"
+        :eventid="event.pkiEventID"
+        :title="event.sEventName"
+        :description="event.sDescription"
+        :image="event.sImageUrl"
+        :link="event.sZoomUrl"
+        :startdate="event.dtStartDate"
+        :enddate="event.dtEndDate"
+        :bootcamp="event.sBootcampName"
+        :bootcampid="event.fkiBootcampID"
+        @fetch-events="fetchData"
       />
 
       <section />
@@ -72,7 +76,8 @@ export default {
   async asyncData ({ params, $axios }) {
     let events = []
     try {
-      events = await $axios.$post('graphql', { query: getEvents() }).data
+      const response = await $axios.$post('graphql', { query: getEvents() })
+      events = response.data.events
     } catch (e) {
       console.log(e.message)
     }
@@ -81,48 +86,7 @@ export default {
   },
   data () {
     return {
-      events: [
-        {
-          title: 'Microsoft Worksop',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          datetime: Date.now(),
-          bootcamp: 'McGill',
-          link: 'https://zoom.us/',
-          image: 'https://media.istockphoto.com/photos/man-speaking-at-a-business-conference-picture-id499517325?b=1&k=20&m=499517325&s=170667a&w=0&h=jMCaZov25c5VR1CP-4axUdJPEKSpBWbzzWAubQS3-oo='
-        },
-        {
-          title: 'Microsoft Worksop',
-          description: 'Lorem ipsum',
-          datetime: Date.now(),
-          bootcamp: 'McGill',
-          link: 'https://zoom.us/',
-          image: 'image'
-        },
-        {
-          title: 'Microsoft Worksop',
-          description: 'Lorem ipsum',
-          datetime: Date.now(),
-          bootcamp: 'McGill',
-          link: 'https://zoom.us/',
-          image: 'image'
-        },
-        {
-          title: 'Microsoft Worksop',
-          description: 'Lorem ipsum',
-          datetime: Date.now(),
-          bootcamp: 'McGill',
-          link: 'https://zoom.us/',
-          image: 'image'
-        },
-        {
-          title: 'Microsoft Worksop',
-          description: 'Lorem ipsum',
-          datetime: Date.now(),
-          bootcamp: 'McGill',
-          link: 'https://zoom.us/',
-          image: 'image'
-        }
-      ]
+      events: []
     }
   },
   head () {
@@ -141,6 +105,16 @@ export default {
     this.$nuxt.$emit('current-link', 'Events')
   },
   methods: {
+    async fetchData () {
+      let events = []
+      try {
+        const response = await this.$axios.$post('graphql', { query: getEvents() })
+        events = response.data.events
+      } catch (e) {
+        console.log(e.message)
+      }
+      this.events = events
+    }
   }
 }
 </script>
