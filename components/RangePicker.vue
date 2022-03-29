@@ -1,6 +1,6 @@
 <template>
   <client-only>
-    <DatePicker v-model="range" is-range>
+    <DatePicker v-model="newRange" is-range>
       <template #default="{ inputValue, inputEvents }">
         <div class="flex items-center">
           <input
@@ -34,11 +34,28 @@
 
 <script>
 export default {
-  data () {
-    return {
-      range: {
-        start: new Date(),
-        end: new Date()
+  props: {
+    start: {
+      type: String,
+      default: new Date().toISOString()
+    },
+    end: {
+      type: String,
+      default: new Date().toISOString()
+    }
+  },
+  emits: ['update:start', 'update:end'],
+  computed: {
+    newRange: {
+      get () {
+        return {
+          start: this.start,
+          end: this.end
+        }
+      },
+      set (value) {
+        this.$emit('start', value.start.toISOString())
+        this.$emit('end', value.end.toISOString())
       }
     }
   }

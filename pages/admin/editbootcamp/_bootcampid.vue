@@ -27,7 +27,7 @@
           <h1 class="sort">
             Date
           </h1>
-          <RangePicker />
+          <RangePicker :start="bootcamp.dtStartDate" :end="bootcamp.dtEndDate" @start="bootcamp.dtStartDate = $event" @end="bootcamp.dtEndDate = $event" />
         </section>
         <section>
           <h1 class="sort">
