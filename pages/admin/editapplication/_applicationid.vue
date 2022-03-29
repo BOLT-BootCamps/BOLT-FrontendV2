@@ -40,7 +40,7 @@
           <h1 class="sort">
             Date
           </h1>
-          <RangePicker />
+          <RangePicker :start="application.dtStartDate" :end="application.dtEndDate" @start="application.dtStartDate = $event" @end="application.dtEndDate = $event" />
         </section>
         <section>
           <h1 class="sort">
