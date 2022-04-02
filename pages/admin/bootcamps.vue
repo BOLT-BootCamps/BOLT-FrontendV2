@@ -5,7 +5,7 @@
         Bootcamps
       </h1>
       <section class="flex flex-row">
-        <section class="flex flex-row text-white space-x-2 items-center">
+        <section class="flex flex-row ml-auto text-white space-x-2 items-center">
           <NuxtLink class="bg-blue-500 px-2 py-1 rounded-md" to="/admin/addBootcamp">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />

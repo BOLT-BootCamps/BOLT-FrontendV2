@@ -38,27 +38,32 @@
             </svg>
             New Event
           </NuxtLink>
-          <button class="bg-green-500 px-2 py-2 rounded-md inline-block">
+          <button class="bg-green-500 px-2 py-2 rounded-md inline-block" @click="currentView = !currentView">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </button>
         </section>
       </section>
-      <event-card
-        v-for="(event, ind) in events"
-        :key="ind"
-        :eventid="event.pkiEventID"
-        :title="event.sEventName"
-        :description="event.sDescription"
-        :image="event.sImageUrl"
-        :link="event.sZoomUrl"
-        :startdate="event.dtStartDate"
-        :enddate="event.dtEndDate"
-        :bootcamp="event.sBootcampName"
-        :bootcampid="event.fkiBootcampID"
-        @fetch-events="fetchData"
-      />
+      <section v-if="currentView === true" class="flex flex-col space-y-4">
+        <event-card
+          v-for="(event, ind) in events"
+          :key="ind"
+          :eventid="event.pkiEventID"
+          :title="event.sEventName"
+          :description="event.sDescription"
+          :image="event.sImageUrl"
+          :link="event.sZoomUrl"
+          :startdate="event.dtStartDate"
+          :enddate="event.dtEndDate"
+          :bootcamp="event.sBootcampName"
+          :bootcampid="event.fkiBootcampID"
+          @fetch-events="fetchData"
+        />
+      </section>
+      <section v-else>
+        <Calendar />
+      </section>
 
       <section />
     </section>
@@ -67,10 +72,11 @@
 
 <script>
 import EventCard from '~/components/admin/EventCard.vue'
+import Calendar from '~/components/Calendar.vue'
 import { getEvents } from '~/utils/graphql'
 export default {
   name: 'AdminEvents',
-  components: { EventCard },
+  components: { EventCard, Calendar },
   layout: 'admin',
   middleware: 'auth',
   async asyncData ({ params, $axios }) {
@@ -86,7 +92,8 @@ export default {
   },
   data () {
     return {
-      events: []
+      events: [],
+      currentView: true
     }
   },
   head () {
