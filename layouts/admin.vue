@@ -35,6 +35,10 @@ export default {
         {
           name: 'Bootcamps',
           route: '/admin/bootcamps'
+        },
+        {
+          name: 'Calendar',
+          route: '/calendar'
         }
       ],
       currentTab: ''

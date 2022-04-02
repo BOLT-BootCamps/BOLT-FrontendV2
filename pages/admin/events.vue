@@ -39,8 +39,18 @@
             New Event
           </NuxtLink>
           <button class="bg-green-500 px-2 py-2 rounded-md inline-block" @click="currentView = !currentView">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg
+              v-if="currentView == true"
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
             </svg>
           </button>
         </section>
@@ -62,7 +72,7 @@
         />
       </section>
       <section v-else>
-        <Calendar />
+        <Calendar :attributes="toCalendar" />
       </section>
 
       <section />
@@ -108,6 +118,26 @@ export default {
       ]
     }
   },
+  computed: {
+    toCalendar () {
+      const calendar = []
+      for (let i = 0; i < this.events.length; i++) {
+        const event = this.events[i]
+        const dateItem = {
+          key: event.pkiEventID,
+          customData: {
+            title: event.sEventName,
+            class: 'bg-blue-500 text-white',
+            link: `/admin/events/${event.pkiEventID}`
+          },
+          dates: { start: new Date(event.dtStartDate), end: new Date(event.dtEndDate) }
+        }
+        calendar.push(dateItem)
+      }
+
+      return calendar
+    }
+  },
   mounted () {
     this.$nuxt.$emit('current-link', 'Events')
   },
@@ -122,6 +152,7 @@ export default {
       }
       this.events = events
     }
+
   }
 }
 </script>
