@@ -17,7 +17,9 @@
               class="text-xs leading-tight rounded-sm p-1 mt-0 mb-1"
               :class="attr.customData.class"
             >
-              {{ attr.customData.title }}
+              <NuxtLink :to="attr.customData.link">
+                {{ attr.customData.title }}
+              </NuxtLink>
             </p>
           </div>
         </div>
@@ -28,6 +30,12 @@
 
 <script>
 export default {
+  props: {
+    attributes: {
+      type: Array,
+      default: () => []
+    }
+  },
   data () {
     const month = new Date().getMonth()
     const year = new Date().getFullYear()
@@ -35,7 +43,7 @@ export default {
       masks: {
         weekdays: 'WWW'
       },
-      attributes: [
+      attributesDemo: [
         {
           key: 1,
           customData: {
