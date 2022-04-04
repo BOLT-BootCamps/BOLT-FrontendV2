@@ -15,7 +15,7 @@
         </section>
       </section>
       <application-card
-        v-for="(application, ind) in applications"
+        v-for="(application, ind) in sortApplications()"
         :key="ind"
         :applicationid="application.pkiApplicationID"
         :title="application.sApplicationName"
@@ -35,7 +35,7 @@
 
 <script>
 import ApplicationCard from '~/components/admin/ApplicationCard.vue'
-import { getApplications } from '~/utils/graphql'
+import { getApplications, getBootcampNames } from '~/utils/graphql'
 export default {
   name: 'AdminApplications',
   components: { ApplicationCard },
@@ -49,8 +49,14 @@ export default {
     } catch (e) {
       console.log(e.message)
     }
-    console.log(applications)
-    return { applications }
+    let bootcamps = []
+    try {
+      const response = await $axios.$post('graphql', { query: getBootcampNames() })
+      bootcamps = response.data.bootcamps
+    } catch (e) {
+      console.log(e.message)
+    }
+    return { applications, bootcamps }
   },
   data () {
     return {
@@ -73,7 +79,11 @@ export default {
           sFormUrl: 'form link',
           sImageUrl: 'image'
         }
-      ]
+      ],
+      sort: 'Date',
+      applicationFilter: '',
+      bootcamps: []
+
     }
   },
   head () {
@@ -101,6 +111,31 @@ export default {
         console.log(e.message)
       }
       this.applications = applications
+    },
+    sortApplications () {
+      /*
+      let newApplications = this.applications
+      if (this.sort === 'Date') {
+        newApplications = newApplications.sort((a, b) => {
+          if (a.dtStartDate === b.dtStartDate) {
+            return (a.dtEndDate > b.dtEndDate) ? 1 : -1
+          }
+          return (a.dtStartDate > b.dtStartDate) ? 1 : -1
+        })
+      } else if (this.sort === 'Alphabetical') {
+        newApplications = newApplications.sort((a, b) => ((a.sApplicationName > b.sApplicationName) ? 1 : -1))
+      }
+
+      if (this.applicationFilter !== '') {
+        newApplications = newApplications.filter((el) => {
+          if (el.fkiApplicationID === this.applicationFilter) {
+            return true
+          }
+          return false
+        })
+      }
+      */
+      return this.applications
     }
   }
 }
