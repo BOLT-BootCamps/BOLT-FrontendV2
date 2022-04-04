@@ -9,12 +9,12 @@
           <p class="sort">
             Sort By:
           </p>
-          <select id="sort" name="sort" class="dropdown">
+          <select id="sort" v-model="sort" name="sort" class="dropdown">
             <option value="Date">
               Date
             </option>
-            <option value="Not Date">
-              Upcoming Events
+            <option value="Alphabetical">
+              Alphabetical
             </option>
           </select>
         </div>
@@ -22,12 +22,12 @@
           <p class="sort">
             Bootcamp:
           </p>
-          <select id="sort" name="sort" class="dropdown">
-            <option value="Date">
-              Date
+          <select id="sort" v-model="bootcampFilter" name="sort" class="dropdown">
+            <option value="" class="input-text">
+              All Bootcamps
             </option>
-            <option value="Not Date">
-              Not Date
+            <option v-for="(bootcamp, id) in bootcamps" :key="id" :value="bootcamp.pkiBootcampID" class="input-text">
+              {{ bootcamp.sBootcampName }}
             </option>
           </select>
         </div>
@@ -57,7 +57,7 @@
       </section>
       <section v-if="currentView === true" class="flex flex-col space-y-4">
         <event-card
-          v-for="(event, ind) in events"
+          v-for="(event, ind) in sortEvents"
           :key="ind"
           :eventid="event.pkiEventID"
           :title="event.sEventName"
@@ -83,7 +83,7 @@
 <script>
 import EventCard from '~/components/admin/EventCard.vue'
 import Calendar from '~/components/Calendar.vue'
-import { getEvents } from '~/utils/graphql'
+import { getEvents, getBootcampNames } from '~/utils/graphql'
 export default {
   name: 'AdminEvents',
   components: { EventCard, Calendar },
@@ -97,12 +97,21 @@ export default {
     } catch (e) {
       console.log(e.message)
     }
-
-    return { events }
+    let bootcamps = []
+    try {
+      const response = await $axios.$post('graphql', { query: getBootcampNames() })
+      bootcamps = response.data.bootcamps
+    } catch (e) {
+      console.log(e.message)
+    }
+    return { events, bootcamps }
   },
   data () {
     return {
       events: [],
+      sort: 'Date',
+      bootcampFilter: '',
+      bootcamps: [],
       currentView: true
     }
   },
@@ -136,6 +145,29 @@ export default {
       }
 
       return calendar
+    },
+    sortEvents () {
+      let newEvents = this.events
+      if (this.sort === 'Date') {
+        newEvents = newEvents.sort((a, b) => {
+          if (a.dtStartDate === b.dtStartDate) {
+            return (a.dtEndDate > b.dtEndDate) ? 1 : -1
+          }
+          return (a.dtStartDate > b.dtStartDate) ? 1 : -1
+        })
+      } else if (this.sort === 'Alphabetical') {
+        newEvents = newEvents.sort((a, b) => ((a.sEventName > b.sEventName) ? 1 : -1))
+      }
+
+      if (this.bootcampFilter !== '') {
+        newEvents = newEvents.filter((el) => {
+          if (el.fkiBootcampID === this.bootcampFilter) {
+            return true
+          }
+          return false
+        })
+      }
+      return newEvents
     }
   },
   mounted () {
