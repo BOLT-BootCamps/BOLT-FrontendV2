@@ -331,6 +331,7 @@ export const editBootcamp = () => {
   `
   return mutation
 }
+
 export const deleteBootcamp = () => {
   const mutation = `
   mutation DELETEBOOTCAMP(
@@ -339,4 +340,42 @@ export const deleteBootcamp = () => {
     deleteBootcamp (id: $id)
   }`
   return mutation
+}
+
+// Zoom Endpoints
+
+export const getZoomDetails = (id) => {
+  const query = `
+    query GETZOOMDETAILS($id: Int!) {
+      zoom(meeting_id: $id) {
+        id,
+        start_time,
+        topic,
+        duration,
+        total_minutes,
+        participants_count,
+        type,
+        logs
+      }
+    }
+  `
+  return query
+}
+
+export const getAllZoom = () => {
+  const query = `
+    query GETZOOMDETAILS() {
+      zooms {
+        id,
+        start_time,
+        topic,
+        duration,
+        total_minutes,
+        participants_count,
+        type,
+        logs
+      }
+    }
+  `
+  return query
 }

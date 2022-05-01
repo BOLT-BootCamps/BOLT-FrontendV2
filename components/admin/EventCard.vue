@@ -25,6 +25,11 @@
               Edit Event
             </button>
           </NuxtLink>
+          <NuxtLink :to="'/admin/events/'+eventid">
+            <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
+              View Event
+            </button>
+          </NuxtLink>
           <button class="border-2 border-red-500 rounded-md py-2 px-4 hover:bg-red-500 hover:text-white transition-colors font-medium" @click="showDeleteModal = true">
             Delete Event
           </button>
