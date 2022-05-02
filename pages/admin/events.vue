@@ -74,7 +74,6 @@
       <section v-else>
         <Calendar :attributes="toCalendar" />
       </section>
-
       <section />
     </section>
   </div>

@@ -1,4 +1,3 @@
-
 export const formatAMPM = (datetime) => {
   const date = new Date(datetime)
   let hours = date.getHours()
