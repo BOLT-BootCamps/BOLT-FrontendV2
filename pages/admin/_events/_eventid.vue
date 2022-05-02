@@ -70,7 +70,7 @@
             Logs: {{ zoomDetail.participants_count }}
           </div>
         </div>
-        <LineChart :data="lineChartData" :options="lineChartOptions" :height="400" />
+        <ScatterChart :data="generateParticipantLogs" :options="lineChartOptions" :height="400" />
       </section>
     </section>
   </div>
@@ -80,11 +80,11 @@
 import { google } from 'calendar-link'
 import { formatAMPM } from '~/utils/date'
 import { getEvent, getBootcampNames, getZoomDetails } from '~/utils/graphql'
-import LineChart from '~/components/LineChart.vue'
+import ScatterChart from '~/components/ScatterChart.vue'
 
 export default {
   name: 'AdminViewEvents',
-  components: { LineChart },
+  components: { ScatterChart },
   layout: 'admin',
   middleware: 'auth',
   async asyncData ({ params, $axios }) {
@@ -113,14 +113,24 @@ export default {
       zoomId = event.sZoomUrl.substring(event.sZoomUrl.indexOf('j') + 2)
     }
 
-    let zoomDetail = {}
+    let zoomDetail = {
+      id: '',
+      start_time: '',
+      topic: '',
+      duration: '',
+      total_minutes: '',
+      participants_count: '',
+      type: '',
+      logs: []
+    }
+
     try {
       const response = await $axios.$post('graphql',
         {
           query: getZoomDetails(),
           variables: { id: zoomId }
         })
-      zoomDetail = response.data.zoom
+      zoomDetail = { ...zoomDetail, ...response.data.zoom }
     } catch (e) {
       console.log(e.message)
     }
@@ -163,6 +173,7 @@ export default {
           }
         ]
       },
+      scatterChartData: {},
       zoomDetail: {
         id: '',
         start_time: '',
@@ -198,6 +209,28 @@ export default {
         url: this.event.sZoomUrl
       }
       return google(eventCalendar)
+    },
+    generateParticipantLogs () {
+      const scatterChartData = {
+        datasets: [
+          {
+            label: 'People in Zoom Meeting',
+            data: [{
+              x: 10,
+              y: 0
+            },
+            {
+              x: 5,
+              y: 5
+            }],
+            backgroundColor: 'rgba(20, 255, 0, 0.3)',
+            borderColor: 'rgba(100, 255, 0, 1)',
+            borderWidth: 2
+          }
+        ]
+      }
+
+      return scatterChartData
     }
   },
   mounted () {
