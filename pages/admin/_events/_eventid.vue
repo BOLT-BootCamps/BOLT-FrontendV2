@@ -5,9 +5,14 @@
         <h1 class="title pb-4">
           {{ event.sEventName }}
         </h1>
-        <div class="flex bg-green-500 text-white ml-auto items-center rounded-sm py-1 px-16">
+        <div v-if="new Date() < new Date(event.dtEndDate)" class="flex bg-green-500 text-white ml-auto items-center rounded-sm py-1 px-16">
           <p class="text-2xl">
             UPCOMING
+          </p>
+        </div>
+        <div v-else class="flex bg-blue-500 text-white ml-auto items-center rounded-sm py-1 px-16">
+          <p class="text-2xl">
+            COMPLETED
           </p>
         </div>
       </div>
@@ -19,7 +24,7 @@
           <div class="event-title">
             {{ event.sBootcampName }}
           </div>
-          <div>
+          <div class="break-words">
             {{ event.sZoomUrl }}
           </div>
           <div class="event-title">
@@ -32,10 +37,14 @@
             -
             {{ formatAMPM(event.dtEndDate) }}
           </div>
-          {{ event.sDescription }}
+          <p>
+            {{ event.sDescription }}
+          </p>
           <div class="flex absolute bottom-4 space-x-2">
             <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
-              Add to Calendar
+              <a :href="generateLink" target="_blank">
+                Add to Calendar
+              </a>
             </button>
             <button class="border-2 border-black rounded-md hover:bg-gray-500 py-2 px-4 hover:text-white transition-colors font-medium">
               Share on Facebook
@@ -46,21 +55,36 @@
           </div>
         </div>
       </section>
-      <section class="bg-white">
-        <BarChart :data="barChartData" :options="barChartOptions" :height="400" :width="400" />
+      <section class="bg-white p-4">
+        <div class="title">
+          Statistics
+        </div>
+        <div class="flex flex-row space-x-4">
+          <div class="event-title">
+            Name: {{ zoomDetail.topic }}
+          </div>
+          <div class="event-title">
+            Duration: {{ zoomDetail.total_minutes }} mins
+          </div>
+          <div class="event-title">
+            Logs: {{ zoomDetail.participants_count }}
+          </div>
+        </div>
+        <LineChart :data="lineChartData" :options="lineChartOptions" :height="400" />
       </section>
     </section>
   </div>
 </template>
 
 <script>
+import { google } from 'calendar-link'
 import { formatAMPM } from '~/utils/date'
-import { getEvent, getBootcampNames } from '~/utils/graphql'
-import BarChart from '~/components/BarChart.vue'
+import { getEvent, getBootcampNames, getZoomDetails } from '~/utils/graphql'
+import LineChart from '~/components/LineChart.vue'
 
 export default {
   name: 'AdminViewEvents',
-  components: { BarChart },
+  components: { LineChart },
   layout: 'admin',
   middleware: 'auth',
   async asyncData ({ params, $axios }) {
@@ -83,7 +107,25 @@ export default {
     } catch (e) {
       console.log(e.message)
     }
-    return { bootcamps, event }
+
+    let zoomId = ''
+    if (event) {
+      zoomId = event.sZoomUrl.substring(event.sZoomUrl.indexOf('j') + 2)
+    }
+
+    let zoomDetail = {}
+    try {
+      const response = await $axios.$post('graphql',
+        {
+          query: getZoomDetails(),
+          variables: { id: zoomId }
+        })
+      zoomDetail = response.data.zoom
+    } catch (e) {
+      console.log(e.message)
+    }
+
+    return { bootcamps, event, zoomDetail }
   },
   data () {
     return {
@@ -98,7 +140,7 @@ export default {
       },
       bootcamps: [],
       submitted: false,
-      barChartData: {
+      lineChartData: {
         labels: [
           '2019-06',
           '2019-07',
@@ -120,6 +162,16 @@ export default {
             borderWidth: 2
           }
         ]
+      },
+      zoomDetail: {
+        id: '',
+        start_time: '',
+        topic: '',
+        duration: '',
+        total_minutes: '',
+        participants_count: '',
+        type: '',
+        logs: []
       }
 
     }
@@ -134,6 +186,18 @@ export default {
           content: 'BOLT View Event'
         }
       ]
+    }
+  },
+  computed: {
+    generateLink () {
+      const eventCalendar = {
+        title: this.event.sEventName,
+        description: this.event.sDescription,
+        start: this.event.dtStartDate,
+        duration: [1, 'hour'],
+        url: this.event.sZoomUrl
+      }
+      return google(eventCalendar)
     }
   },
   mounted () {

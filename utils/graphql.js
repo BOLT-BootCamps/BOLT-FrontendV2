@@ -344,9 +344,9 @@ export const deleteBootcamp = () => {
 
 // Zoom Endpoints
 
-export const getZoomDetails = (id) => {
+export const getZoomDetails = () => {
   const query = `
-    query GETZOOMDETAILS($id: Int!) {
+    query GETZOOMDETAILS($id: String!) {
       zoom(meeting_id: $id) {
         id,
         start_time,
@@ -355,7 +355,16 @@ export const getZoomDetails = (id) => {
         total_minutes,
         participants_count,
         type,
-        logs
+        logs {
+          id,
+          user_id,
+          name,
+          user_email,
+          join_time,
+          leave_time,
+          duration,
+          status
+        }
       }
     }
   `
@@ -373,7 +382,16 @@ export const getAllZoom = () => {
         total_minutes,
         participants_count,
         type,
-        logs
+        logs {
+          id,
+          user_id,
+          name,
+          user_email,
+          join_time,
+          leave_time,
+          duration,
+          status
+        }
       }
     }
   `
